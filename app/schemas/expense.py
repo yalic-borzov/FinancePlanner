@@ -8,6 +8,7 @@ from app.schemas.category import CategorySchema
 
 # Используется предыдущее определение CategorySchema
 
+
 class ExpenseCreate(BaseModel):
     category_id: int
     amount: float
@@ -21,7 +22,7 @@ class ExpenseSchema(BaseModel):
     amount: float
     date: date
     description: Optional[str] = None
-    category: Optional[CategorySchema] = None  # Включаем сведения о категории как опциональное поле
+    category: Optional[CategorySchema] = None
 
     class Config:
         from_attributes = True

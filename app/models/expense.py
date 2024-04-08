@@ -8,10 +8,12 @@ from app.models.category import Category
 
 
 class Expense(Base):
-    __tablename__ = 'expenses'
+    __tablename__ = "expenses"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    category_id: Mapped[int] = mapped_column(ForeignKey('categories.id'), nullable=False)
+    category_id: Mapped[int] = mapped_column(
+        ForeignKey("categories.id"), nullable=False
+    )
     amount: Mapped[float] = mapped_column(nullable=False)
     date: Mapped[date]
     description: Mapped[Optional[str]] = mapped_column(nullable=True)
