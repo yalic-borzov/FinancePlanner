@@ -1,9 +1,8 @@
 from logging.config import fileConfig
 
+from alembic import context
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-
-from alembic import context
 
 from app.db.db import Base
 
@@ -23,6 +22,7 @@ if config.config_file_name is not None:
 # fmt: off
 from app.models.category import Category  # noqa
 from app.models.expense import Expense  # noqa
+from app.models.user import User  # noqa
 
 # fmt: on
 target_metadata = Base.metadata

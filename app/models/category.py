@@ -6,8 +6,10 @@ from app.db.db import Base  # Убедись, что этот импорт ко�
 
 
 class Category(Base):
-    __tablename__ = 'categories'
+    __tablename__ = "categories"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(unique=True, nullable=False)
-    expenses: Mapped[List["Expense"]] = relationship("Expense", back_populates="category")
+    expenses: Mapped[List["Expense"]] = relationship(  # noqa
+        "Expense", back_populates="category"
+    )
