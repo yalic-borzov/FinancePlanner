@@ -11,10 +11,11 @@ from app.schemas.category import (
 
 async def create_category_handler(
     data: CategoryCreate, user_id, session: AsyncSession
-) -> Response:
+) -> tuple[Response, int]:
     if await check_category_by_name(data.name, session):
-        return jsonify(
-            {"message": f"Category with name: '{data.name}' already exists!"}
+        return (
+            jsonify({"message": f"Category with name: '{data.name}' already exists!"}),
+            403,
         )
 
     new_category = Category(name=data.name, user_id=user_id)
@@ -23,4 +24,4 @@ async def create_category_handler(
     await session.commit()
     await session.refresh(new_category)
 
-    return jsonify(CategorySchema.from_orm(new_category).dict())
+    return jsonify(CategorySchema.from_orm(new_category).dict()), 200
