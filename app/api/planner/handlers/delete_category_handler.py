@@ -26,4 +26,4 @@ async def delete_category_handler(
 
             except NoResultFound:
                 return jsonify({"message": "Category not found"}), 404
-            return jsonify({"message": "Expense deleted successfully"}), 200
+            return jsonify({"message": "Category deleted successfully"}), 200
