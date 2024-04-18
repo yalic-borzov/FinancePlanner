@@ -1,16 +1,16 @@
-"""add model
+"""for personal user
 
-Revision ID: e46f6e14b2ed
-Revises: aad6018c07b9
-Create Date: 2024-04-08 08:50:38.353330
+Revision ID: 1c9bb7c02e0f
+Revises: 2f2bc3d76032
+Create Date: 2024-04-14 18:18:34.327426
 
 """
 
 from typing import Sequence, Union
 
 # revision identifiers, used by Alembic.
-revision: str = "e46f6e14b2ed"
-down_revision: Union[str, None] = "aad6018c07b9"
+revision: str = "1c9bb7c02e0f"
+down_revision: Union[str, None] = "2f2bc3d76032"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

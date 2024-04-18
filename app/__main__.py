@@ -3,15 +3,16 @@ from flask_jwt_extended import JWTManager
 
 from app.api.auth.auth_routes import auth
 from app.api.planner.planner_routes import planner
+from app.config import JWT_SECRET
 
 
 def create_app() -> Flask:
     app = Flask(__name__)
     app.config["JWT_SECRET_KEY"] = (
-        "rzsVsacj4FPu3LPXfJQvGCYgwHZKmkkBjHM4x6AGcdoX55jvMQyXQG7zjFHeVsU8c7Gxs4XHKYLGQfmjde7oNTKjptUAZb2uET3oPqjQqiFLat5VA8bYE7CCFsndPPBW"
+        JWT_SECRET
     )
-    jwt = JWTManager(app)
-    app.register_blueprint(planner, url_prefix="/api/planner")
+    JWTManager(app)
+    app.register_blueprint(planner, url_prefix="/api/p")
     app.register_blueprint(auth, url_prefix="/api/auth")
     return app
 

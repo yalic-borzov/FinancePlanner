@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.category import Category
+from app.models.planner_models import Category
 
 
 async def check_category_exists(category_id: int, session: AsyncSession) -> bool:
