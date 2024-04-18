@@ -4,7 +4,11 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.api.planner.handlers.create_category import create_category_handler
 from app.api.planner.handlers.create_expense_handler import create_expense_handler
 from app.api.planner.handlers.delete_expense_handler import delete_expense_handler
+from app.api.planner.handlers.get_all_categories_handler import (
+    get_all_categories_handler,
+)
 from app.api.planner.handlers.get_all_expenses_handler import get_all_expenses_handler
+from app.api.planner.handlers.get_category_handler import get_category_handler
 from app.api.planner.handlers.get_expense_handler import get_expense_handler
 from app.db.db import get_async_session
 from app.schemas.category import CategoryCreate
@@ -56,3 +60,17 @@ async def create_category():
     category_data = CategoryCreate(**data)
     async with get_async_session() as session:
         return await create_category_handler(category_data, user_id, session)
+
+
+@planner.route("/categories", methods=["GET"])
+@jwt_required()
+async def get_categories():
+    user_id = get_jwt_identity()
+    return await get_all_categories_handler(user_id)
+
+
+@planner.route("/categories/<int:category_id>", methods=["GET"])
+@jwt_required()
+async def get_category(category_id: int):
+    user_id = get_jwt_identity()
+    return await get_category_handler(category_id, user_id)

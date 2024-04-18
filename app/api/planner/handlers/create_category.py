@@ -10,7 +10,7 @@ from app.schemas.category import (
 
 
 async def create_category_handler(
-        data: CategoryCreate, user_id, session: AsyncSession
+    data: CategoryCreate, user_id, session: AsyncSession
 ) -> Response:
     if await check_category_by_name(data.name, session):
         return jsonify(

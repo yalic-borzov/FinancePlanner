@@ -1,5 +1,6 @@
 from flask import jsonify, Response
 from sqlalchemy import select
+from sqlalchemy.orm import joinedload
 
 from app.db.db import get_async_session
 from app.models import Expense
@@ -11,8 +12,8 @@ async def get_all_expenses_handler(user_id: int) -> tuple[Response, int]:
         # Выбираем все траты для текущего пользователя
         result = await session.execute(
             select(Expense)
+            .options(joinedload(Expense.category))
             .where(Expense.user_id == user_id)
-            .order_by(Expense.date.desc())
         )
         expenses = result.scalars().all()
 

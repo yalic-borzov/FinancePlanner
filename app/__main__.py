@@ -8,9 +8,7 @@ from app.config import JWT_SECRET
 
 def create_app() -> Flask:
     app = Flask(__name__)
-    app.config["JWT_SECRET_KEY"] = (
-        JWT_SECRET
-    )
+    app.config["JWT_SECRET_KEY"] = JWT_SECRET
     JWTManager(app)
     app.register_blueprint(planner, url_prefix="/api/p")
     app.register_blueprint(auth, url_prefix="/api/auth")

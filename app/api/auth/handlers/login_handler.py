@@ -8,7 +8,7 @@ from app.schemas.user import UserLogin
 
 
 async def login_handler(
-        data: Request, session: AsyncSession
+    data: Request, session: AsyncSession
 ) -> Response | tuple[Response, int]:
     try:
         login_data = UserLogin(**data.get_json())
