@@ -4,6 +4,7 @@ import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
 import RegisterPage from "./pages/RegisterPage.tsx";
 import DashboardPage from "./pages/DashboardPage.tsx";
+import PrivateRoute from "./pages/PrivateRoute.tsx";
 
 const App: React.FC = () => {
     return (
@@ -12,8 +13,9 @@ const App: React.FC = () => {
                 <Route path="/" element={<HomePage/>}/>
                 <Route path="/login" element={<LoginPage/>}/>
                 <Route path="/register" element={<RegisterPage/>}/>
-                <Route path={"/dashboard"} element={<DashboardPage/>}/>
-                {/* Другие маршруты могут быть добавлены здесь */}
+                <Route path={"/dashboard"} element={<PrivateRoute>
+                    <DashboardPage/>
+                </PrivateRoute>}/>
             </Routes>
         </Router>
     );

@@ -1,13 +1,10 @@
 import React from 'react';
+import {SubmitButtonProps} from "../types";
 
-interface SubmitButtonProps {
-    text: string;
-    onClick: () => void;
-}
 
-const PrimaryButton: React.FC<SubmitButtonProps> = ({text, onClick}) => {
+const PrimaryButton: React.FC<SubmitButtonProps> = ({text, key, onClick}) => {
     return (
-        <button className="btn btn-primary w-100" onClick={onClick}>
+        <button className="btn btn-primary w-100" key={key} onClick={onClick}>
             {text}
         </button>
     );

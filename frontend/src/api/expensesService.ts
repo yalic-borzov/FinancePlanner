@@ -4,11 +4,10 @@ import axios from './axiosConfig';
 const API_BASE_URL = 'http://localhost:5000/api/planner';
 
 class ExpensesService {
-    async createExpense(category_id: number, amount: number, date: string, description?: string) {
+    async createExpense(category_id: number, amount: number, description?: string) {
         const response = await axios.post(`${API_BASE_URL}/expenses`, {
             category_id,
             amount,
-            date,
             description,
         });
         return response.data;
@@ -26,6 +25,16 @@ class ExpensesService {
 
     async deleteExpense(id: number) {
         const response = await axios.delete(`${API_BASE_URL}/expenses/${id}`);
+        return response.data;
+    }
+
+    async getCategories() {
+        const response = await axios.get(`${API_BASE_URL}/categories`);
+        return response.data;
+    }
+
+    async getExpensesStats(period: string) {
+        const response = await axios.get(`${API_BASE_URL}/expenses/stats?period=${period}`);
         return response.data;
     }
 }

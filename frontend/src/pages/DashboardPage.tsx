@@ -1,42 +1,79 @@
 import React, {useEffect, useState} from 'react';
-import Header from "../components/Header.tsx";
+import {Category, ExpensesStats as ExpensesStatsType} from '../types';
 import {expensesService} from "../api/expensesService.ts";
-import {Expense} from "../types";
+import Header from "../components/Header.tsx";
+import Numpad from "../components/Numpad.tsx";
+import PrimaryButton from "../components/PrimaryButton.tsx";
+import ExpensesChart from "../components/ExpensesChart.tsx";
+import Accordion from "../components/AccordionforStats.tsx";
+import ExpensesStats from "../components/ExpensesStats.tsx";
 
 const DashboardPage: React.FC = () => {
-    const [expenses, setExpenses] = useState<Expense[]>([]);
-
+    const [amount, setAmount] = useState('');
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [selectedCategory, setSelectedCategory] = useState<string>('');
+    const [stats, setStats] = useState<ExpensesStatsType | null>(null);
     useEffect(() => {
-        const fetchExpenses = async () => {
-            try {
-                const data = await expensesService.getExpenses();
-                setExpenses(data);
-            } catch (error) {
-                console.error('Error fetching expenses:', error);
-                // Обработка ошибок, например, можно показать уведомление пользователю
-            }
-        };
+        expensesService.getCategories().then(setCategories).catch(console.error);
 
-        fetchExpenses();
+        expensesService.getExpensesStats('month').then(setStats).catch(console.error);
     }, []);
+
+
+    const handleAddExpense = async () => {
+        if (!amount || !selectedCategory) {
+            alert('Please enter all required fields.');
+            return;
+        }
+        try {
+            await expensesService.createExpense(
+                parseInt(selectedCategory),
+                parseFloat(amount),
+                ''
+            );
+            alert('Expense added successfully!');
+            // Очистить поля формы или обновить состояние после успешного добавления
+            setAmount('');
+            setSelectedCategory('');
+        } catch (error) {
+            console.error('Error adding expense:', error);
+            alert('Failed to add expense.');
+        }
+    };
 
     return (
         <>
             <Header/>
             <div className="container my-4">
                 <h1>Dashboard</h1>
-                <div className="my-4">
-                    <strong>Баланс: </strong> {/* Здесь будет баланс */}
+                <div>
+                    <div className="numpad__block">
+                        <div className="input-group mb-3">
+                            <input type="text" className="form-control" value={amount}/>
+                            <span className="input-group-text">RUB</span>
+                        </div>
+                        <Numpad value={amount} onValueChange={setAmount}/>
+                        <select value={selectedCategory} className={"form-select"}
+                                onChange={e => setSelectedCategory(e.target.value)}>
+                            <option value="">Select a category</option>
+                            {categories.map(category => (
+                                <option key={category.id} value={category.id}>
+                                    {category.name}
+                                </option>
+                            ))}
+                        </select><br/>
+                        <PrimaryButton onClick={() => handleAddExpense()} text={'Добавить трату'}/>
+
+                    </div>
+
+                    <div className="block__stats">
+                        {/*<h2>Статистика трат:</h2>*/}
+                        <Accordion>
+                            {stats && <ExpensesChart stats={stats}/>}
+                            <ExpensesStats period="month"/>
+                        </Accordion>
+                    </div>
                 </div>
-                <h2>Расходы</h2>
-                <ul>
-                    {expenses.map(expense => (
-                        <li key={expense.id}>
-                            {expense.date}: {expense.category.name} - {expense.amount} (Описание: {expense.description || 'Нет'})
-                        </li>
-                    ))}
-                </ul>
-                {/* Тут можно добавить форму для создания новых расходов */}
             </div>
         </>
     );

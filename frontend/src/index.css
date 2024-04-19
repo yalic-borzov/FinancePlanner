@@ -8,7 +8,7 @@ h1 {
 }
 
 .auth__block {
-    padding: 10px;
+    margin-top: 10px;
 }
 
 .auth__block a {
@@ -30,4 +30,14 @@ h1 {
     width: 90px;
     padding: 0;
     margin-bottom: 5px;
+}
+
+.numpad__block {
+    max-width: 30%;
+    margin: auto;
+}
+
+.block__stats {
+    max-width: 25%;
+    margin: 30px auto auto;
 }
