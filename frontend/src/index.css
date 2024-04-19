@@ -1,0 +1,33 @@
+@font-face {
+    font-family: 'DeltaGothic';
+    src: local('DeltaGothic'), url(./fonts/DelaGothicOne-Regular.ttf);
+}
+
+h1 {
+    font-family: DeltaGothic, sans-serif !important;
+}
+
+.auth__block {
+    padding: 10px;
+}
+
+.auth__block a {
+    margin-bottom: 10px;
+}
+
+.icon_span {
+    padding: 25px 10px;
+    color: black;
+    border-radius: 10px;
+}
+
+.card {
+    font-size: 25px;
+    font-family: DeltaGothic, sans-serif;
+}
+
+.icon {
+    width: 90px;
+    padding: 0;
+    margin-bottom: 5px;
+}
