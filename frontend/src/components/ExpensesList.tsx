@@ -27,21 +27,24 @@ const ExpensesList: React.FC<ExpensesListProps> = ({categories}) => {
 
     return (
         <div>
-            <select onChange={e => setSelectedCategory(e.target.value)}>
-                <option value="all">Все категории</option>
-                {categories.map(category => (
-                    <option key={category.id} value={category.id}>
-                        {category.name}
-                    </option>
-                ))}
-            </select>
-            <ul>
+            <div className="history__block">
+                <select onChange={e => setSelectedCategory(e.target.value)}>
+                    <option value="all">Все категории</option>
+                    {categories.map(category => (
+                        <option key={category.id} value={category.id}>
+                            {category.name}
+                        </option>
+                    ))}
+                </select>
                 {filteredExpenses.map(expense => (
-                    <li key={expense.id}>
-                        {expense.date}: {categories.find(c => c.id === expense.category_id)?.name} - {expense.amount} {expense.description}
-                    </li>
+                    <div className="element">
+                        <span key={expense.id}>
+                            {expense.date}: {categories.find(c => c.id === expense.category_id)?.name} - {expense.amount} {expense.description}
+                        </span>
+                    </div>
                 ))}
-            </ul>
+            </div>
+
         </div>
     );
 };

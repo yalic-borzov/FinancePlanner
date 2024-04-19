@@ -60,7 +60,7 @@ const DashboardPage: React.FC = () => {
                         <Numpad value={amount} onValueChange={setAmount}/>
                         <select value={selectedCategory} className={"form-select"}
                                 onChange={e => setSelectedCategory(e.target.value)}>
-                            <option value="">Select a category</option>
+                            <option value="">Выберите категорию расхода</option>
                             {categories.map(category => (
                                 <option key={category.id} value={category.id}>
                                     {category.name}
