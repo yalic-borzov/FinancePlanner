@@ -7,15 +7,17 @@ import PrimaryButton from "../components/PrimaryButton.tsx";
 import ExpensesChart from "../components/ExpensesChart.tsx";
 import Accordion from "../components/AccordionforStats.tsx";
 import ExpensesStats from "../components/ExpensesStats.tsx";
+import ExpensesList from "../components/ExpensesList.tsx";
+import {useExpenses} from "../context/ExpensesContext.tsx";
 
 const DashboardPage: React.FC = () => {
     const [amount, setAmount] = useState('');
     const [categories, setCategories] = useState<Category[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string>('');
     const [stats, setStats] = useState<ExpensesStatsType | null>(null);
+    const {fetchExpenses} = useExpenses();
     useEffect(() => {
         expensesService.getCategories().then(setCategories).catch(console.error);
-
         expensesService.getExpensesStats('month').then(setStats).catch(console.error);
     }, []);
 
@@ -31,10 +33,13 @@ const DashboardPage: React.FC = () => {
                 parseFloat(amount),
                 ''
             );
+            fetchExpenses();
             alert('Expense added successfully!');
             // Очистить поля формы или обновить состояние после успешного добавления
             setAmount('');
             setSelectedCategory('');
+
+
         } catch (error) {
             console.error('Error adding expense:', error);
             alert('Failed to add expense.');
@@ -67,11 +72,14 @@ const DashboardPage: React.FC = () => {
                     </div>
 
                     <div className="block__stats">
-                        {/*<h2>Статистика трат:</h2>*/}
                         <Accordion>
                             {stats && <ExpensesChart stats={stats}/>}
                             <ExpensesStats period="month"/>
                         </Accordion>
+                    </div>
+                    <div className="history__block">
+
+                        <ExpensesList categories={categories}/>
                     </div>
                 </div>
             </div>

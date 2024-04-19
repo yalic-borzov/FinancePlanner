@@ -19,7 +19,7 @@ const ExpensesStats: React.FC<{ period: string }> = ({period}) => {
     }, [period]);
 
     if (!stats) {
-        return <p>Loading stats...</p>;
+        return <p>Загрузка статистики...</p>;
     }
 
     return (

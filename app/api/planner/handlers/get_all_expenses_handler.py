@@ -1,5 +1,5 @@
 from flask import jsonify, Response
-from sqlalchemy import select
+from sqlalchemy import select, desc
 from sqlalchemy.orm import joinedload
 
 from app.db.db import get_async_session
@@ -14,9 +14,9 @@ async def get_all_expenses_handler(user_id: int) -> tuple[Response, int]:
             select(Expense)
             .options(joinedload(Expense.category))
             .where(Expense.user_id == user_id)
+            .order_by(desc(Expense.date))
         )
         expenses = result.scalars().all()
 
-    # Сериализация данных через Pydantic
     expenses_data = [ExpenseSchema.from_orm(expense).dict() for expense in expenses]
     return jsonify(expenses_data), 200
