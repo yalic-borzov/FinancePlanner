@@ -1,7 +1,8 @@
-from datetime import date
+from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import ForeignKey
+from sqlalchemy import DateTime
+from sqlalchemy import ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.db import Base
@@ -16,12 +17,12 @@ class Expense(Base):
         ForeignKey("categories.id"), nullable=False
     )
     amount: Mapped[float] = mapped_column(nullable=False)
-    date: Mapped[date]
+    date: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
     description: Mapped[Optional[str]] = mapped_column(nullable=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=True)
-    user = relationship(
-        "User", back_populates="expenses"
-    )  # обратная связь к Category.expenses
+    user = relationship("User", back_populates="expenses")
     category = relationship("Category", back_populates="expenses")
 
 

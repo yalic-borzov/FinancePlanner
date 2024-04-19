@@ -1,3 +1,6 @@
+from datetime import datetime
+
+import pytz
 from flask import Response, jsonify
 
 from app.api.planner.handlers.check_category import check_category_exists
@@ -15,12 +18,14 @@ async def create_expense_handler(data: ExpenseCreate, user_id) -> tuple[Response
                 ),
                 404,
             )
+        moscow_tz = pytz.timezone("Europe/Moscow")
+        date = datetime.now(moscow_tz)
         new_expense = Expense(
             user_id=user_id,
             category_id=data.category_id,
             amount=data.amount,
-            date=data.date,
             description=data.description,
+            date=date,
         )
 
         session.add(new_expense)

@@ -1,4 +1,4 @@
-from flask import Blueprint, request, Response
+from flask import Blueprint, request, Response, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from app.api.planner.handlers.create_category import create_category_handler
@@ -14,6 +14,7 @@ from app.api.planner.handlers.get_expense_handler import get_expense_handler
 from app.db.db import get_async_session
 from app.schemas.category import CategoryCreate
 from app.schemas.expense import ExpenseCreate
+from app.utils.planner_utils import calculate_date_range, calculate_expenses_stats
 
 planner = Blueprint("planner", __name__)
 
@@ -51,6 +52,18 @@ async def delete_expense(expense_id) -> tuple[Response, int]:
     user_id = get_jwt_identity()
     dep = await delete_expense_handler(user_id, expense_id)
     return dep
+
+
+@planner.route("/expenses/stats", methods=["GET"])
+@jwt_required()
+async def get_expenses_stats():
+    user_id = get_jwt_identity()
+    period = request.args.get("period", "month")  # 'month', 'week' или custom dates
+
+    start_date, end_date = calculate_date_range(period)
+    async with get_async_session() as session:
+        stats = await calculate_expenses_stats(user_id, start_date, end_date, session)
+    return jsonify(stats), 200
 
 
 @planner.route("/categories", methods=["POST"])
