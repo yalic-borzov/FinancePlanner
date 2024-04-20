@@ -21,7 +21,9 @@ const ExpensesStats: React.FC<{ period: string }> = ({period}) => {
     if (!stats) {
         return <p>Загрузка статистики...</p>;
     }
-
+    if (!stats || stats.message || !stats.top_categories.length) {
+        return <p>Нет данных для отображения</p>;
+    }
     return (
         <div>
             <h2>Статистика расходов</h2>

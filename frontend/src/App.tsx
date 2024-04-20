@@ -4,22 +4,29 @@ import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
 import RegisterPage from "./pages/RegisterPage.tsx";
 import DashboardPage from "./pages/DashboardPage.tsx";
-import PrivateRoute from "./pages/PrivateRoute.tsx";
 import {ExpensesProvider} from "./context/ExpensesContext.tsx";
+import CategoriesPage from "./pages/CategoriesPage.tsx";
+import ProtectedRoute from "./components/ProtectedRoute.tsx";
+import {AuthProvider} from "./context/AuthContext.tsx";
 
 const App: React.FC = () => {
     return (
         <Router>
-            <ExpensesProvider>
+            <AuthProvider>
                 <Routes>
                     <Route path="/" element={<HomePage/>}/>
                     <Route path="/login" element={<LoginPage/>}/>
                     <Route path="/register" element={<RegisterPage/>}/>
-                    <Route path={"/dashboard"} element={<PrivateRoute>
-                        <DashboardPage/>
-                    </PrivateRoute>}/>
+                    <ProtectedRoute>
+                        <ExpensesProvider>
+                            <Route path={"/dashboard"} element={
+                                <DashboardPage/>}
+                            ></Route>
+                            <Route path={"/categories"} element={<CategoriesPage/>}></Route>
+                        </ExpensesProvider>
+                    </ProtectedRoute>
                 </Routes>
-            </ExpensesProvider>
+            </AuthProvider>
         </Router>
     );
 };

@@ -8,10 +8,16 @@ interface ExpensesChartProps {
             amount: number;
             category_name: string;
         }[];
+        message?: string;
     };
 }
 
 const ExpensesChart: React.FC<ExpensesChartProps> = ({stats}) => {
+    if (!stats || stats.message || !stats.top_categories.length) {
+        // Проверяем наличие сообщения об ошибке или пустой массив категорий
+        return <p>{stats?.message || 'Нет данных для графика'}</p>;
+    }
+
     const data = {
         labels: stats.top_categories.map((c) => c.category_name),
         datasets: [

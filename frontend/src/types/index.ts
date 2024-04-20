@@ -30,4 +30,5 @@ export interface ExpensesStats {
     top_categories: TopCategory[];
     total_amount: number;
     total_count: number;
+    message?: string;
 }

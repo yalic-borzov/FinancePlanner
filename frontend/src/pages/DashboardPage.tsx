@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Category, ExpensesStats as ExpensesStatsType} from '../types';
+import {ExpensesStats as ExpensesStatsType} from '../types';
 import {expensesService} from "../api/expensesService.ts";
 import Header from "../components/Header.tsx";
 import Numpad from "../components/Numpad.tsx";
@@ -9,22 +9,28 @@ import Accordion from "../components/AccordionforStats.tsx";
 import ExpensesStats from "../components/ExpensesStats.tsx";
 import ExpensesList from "../components/ExpensesList.tsx";
 import {useExpenses} from "../context/ExpensesContext.tsx";
+import AddCategoryForm from "../components/AddCategoryForm.tsx";
+
 
 const DashboardPage: React.FC = () => {
     const [amount, setAmount] = useState('');
-    const [categories, setCategories] = useState<Category[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string>('');
     const [stats, setStats] = useState<ExpensesStatsType | null>(null);
     const {fetchExpenses} = useExpenses();
+    const {fetchCategories, categories} = useExpenses();
+
     useEffect(() => {
-        expensesService.getCategories().then(setCategories).catch(console.error);
+        // expensesService.getCategories().then(setCategories).catch(console.error);
         expensesService.getExpensesStats('month').then(setStats).catch(console.error);
     }, []);
+    useEffect(() => {
+        fetchCategories();
+    }, [fetchCategories]);
 
 
     const handleAddExpense = async () => {
         if (!amount || !selectedCategory) {
-            alert('Please enter all required fields.');
+            alert('Заполните все поля');
             return;
         }
         try {
@@ -34,7 +40,7 @@ const DashboardPage: React.FC = () => {
                 ''
             );
             fetchExpenses();
-            alert('Expense added successfully!');
+            alert('Трата успешно добавлена');
             // Очистить поля формы или обновить состояние после успешного добавления
             setAmount('');
             setSelectedCategory('');
@@ -42,7 +48,7 @@ const DashboardPage: React.FC = () => {
 
         } catch (error) {
             console.error('Error adding expense:', error);
-            alert('Failed to add expense.');
+            alert('Не удалось добавить');
         }
     };
 
@@ -50,7 +56,8 @@ const DashboardPage: React.FC = () => {
         <>
             <Header/>
             <div className="container my-4">
-                <h1>Dashboard</h1>
+                <h1>Список трат</h1>
+                <AddCategoryForm/>
                 <div>
                     <div className="numpad__block">
                         <div className="input-group mb-3">
