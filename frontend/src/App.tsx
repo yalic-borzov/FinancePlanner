@@ -1,25 +1,42 @@
 import React from 'react';
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import {BrowserRouter as Router, Navigate, Route, Routes} from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
 import RegisterPage from "./pages/RegisterPage.tsx";
 import DashboardPage from "./pages/DashboardPage.tsx";
-import PrivateRoute from "./pages/PrivateRoute.tsx";
 import {ExpensesProvider} from "./context/ExpensesContext.tsx";
+import CategoriesPage from "./pages/CategoriesPage.tsx";
+import {AuthProvider, useAuth} from "./context/AuthContext.tsx";
+import ProtectedRoute from "./components/ProtectedRoute.tsx";
+
+const AppContent: React.FC = () => {
+    const {isLoggedIn, isAuthReady} = useAuth();
+
+    if (!isAuthReady) {
+        return <div>Loading...</div>;
+    }
+
+    return (
+        <Routes>
+            <Route path="/" element={<HomePage/>}/>
+            <Route path="/login" element={isLoggedIn ? <Navigate to="/dashboard"/> : <LoginPage/>}/>
+            <Route path="/register" element={<RegisterPage/>}/>
+            <Route element={<ProtectedRoute/>}>
+                <Route path="/dashboard" element={!isLoggedIn ? <Navigate to="/login"/> : <DashboardPage/>}/>
+                <Route path="/categories" element={<CategoriesPage/>}/>
+            </Route>
+        </Routes>
+    );
+};
 
 const App: React.FC = () => {
     return (
         <Router>
-            <ExpensesProvider>
-                <Routes>
-                    <Route path="/" element={<HomePage/>}/>
-                    <Route path="/login" element={<LoginPage/>}/>
-                    <Route path="/register" element={<RegisterPage/>}/>
-                    <Route path={"/dashboard"} element={<PrivateRoute>
-                        <DashboardPage/>
-                    </PrivateRoute>}/>
-                </Routes>
-            </ExpensesProvider>
+            <AuthProvider>
+                <ExpensesProvider>
+                    <AppContent/>
+                </ExpensesProvider>
+            </AuthProvider>
         </Router>
     );
 };

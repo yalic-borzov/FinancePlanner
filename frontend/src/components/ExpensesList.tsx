@@ -1,13 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {Category, Expense} from '../types';
 import {useExpenses} from "../context/ExpensesContext.tsx";
+import {Button} from "react-bootstrap";
+import TimeDisplay from "./TimeDisplay.tsx";
 
 interface ExpensesListProps {
     categories: Category[];
 }
 
 const ExpensesList: React.FC<ExpensesListProps> = ({categories}) => {
-    const {expenses} = useExpenses();
+    const {expenses, deleteExpense} = useExpenses();
     const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
@@ -19,6 +21,9 @@ const ExpensesList: React.FC<ExpensesListProps> = ({categories}) => {
             } else {
                 const filtered = expenses.filter(expense => expense.category_id.toString() === selectedCategory);
                 setFilteredExpenses(filtered);
+            }
+            if (expenses.length === 0) {
+                return <p>У вас пока нет расходов. Начните добавлять их прямо сейчас!</p>;
             }
         };
 
@@ -37,10 +42,25 @@ const ExpensesList: React.FC<ExpensesListProps> = ({categories}) => {
                     ))}
                 </select>
                 {filteredExpenses.map(expense => (
-                    <div className="element">
-                        <span key={expense.id}>
-                            {expense.date}: {categories.find(c => c.id === expense.category_id)?.name} - {expense.amount} {expense.description}
-                        </span>
+                    <div className="element" key={expense.id}>
+                        <div className="row">
+                            <div className="col-md-7">
+                                <span>
+                                    {categories.find(c => c.id === expense.category_id)?.name} - {expense.amount} {expense.description}
+                                </span>
+                            </div>
+                            <div className="col">
+                                <span>
+                                    <TimeDisplay dateString={expense.date}/>
+                                </span>
+                            </div>
+                            <div className="col">
+
+                                <Button variant={"outline-danger"} className={"remove__button"}
+                                        onClick={() => deleteExpense(expense.id)}>Удалить</Button>
+                            </div>
+                        </div>
+
                     </div>
                 ))}
             </div>

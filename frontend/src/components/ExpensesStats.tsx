@@ -1,25 +1,21 @@
-import React, {useEffect, useState} from 'react';
-import {ExpensesStats as ExpensesStatsType} from '../types';
-import {expensesService} from "../api/expensesService.ts";
+import React from 'react';
+import {useExpenses} from '../context/ExpensesContext';
 
 const ExpensesStats: React.FC<{ period: string }> = ({period}) => {
-    const [stats, setStats] = useState<ExpensesStatsType | null>(null);
+    const {stats, fetchExpensesStats} = useExpenses();
 
-    useEffect(() => {
-        const fetchStats = async () => {
-            try {
-                const statsData: ExpensesStatsType = await expensesService.getExpensesStats(period);
-                setStats(statsData);
-            } catch (error) {
-                console.error('Error fetching expenses stats:', error);
-            }
-        };
-
-        fetchStats();
-    }, [period]);
+    React.useEffect(() => {
+        if (!stats) {
+            // fetchExpensesStats(period);
+        }
+    }, [period, stats, fetchExpensesStats]);
 
     if (!stats) {
         return <p>Загрузка статистики...</p>;
+    }
+
+    if (!stats.top_categories || stats.top_categories.length === 0) {
+        return <p>Нет данных для отображения</p>;
     }
 
     return (
@@ -29,7 +25,7 @@ const ExpensesStats: React.FC<{ period: string }> = ({period}) => {
             <p>Всего трат: {stats.total_count}</p>
             <h3>Топ категорий:</h3>
             <ul>
-                {stats.top_categories.map((cat) => (
+                {stats.top_categories.map((cat: { category_id: string, category_name: string, amount: number }) => (
                     <li key={cat.category_id}>
                         {cat.category_name}: {cat.amount}
                     </li>

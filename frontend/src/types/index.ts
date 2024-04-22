@@ -20,14 +20,12 @@ export interface SubmitButtonProps {
 }
 
 
-export interface TopCategory {
-    amount: number;
-    category_id: number;
-    category_name: string;
-}
-
 export interface ExpensesStats {
-    top_categories: TopCategory[];
+    top_categories: Array<{
+        category_id: string,
+        category_name: string,
+        amount: number
+    }>;
     total_amount: number;
     total_count: number;
 }

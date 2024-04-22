@@ -37,6 +37,16 @@ class ExpensesService {
         const response = await axios.get(`${API_BASE_URL}/expenses/stats?period=${period}`);
         return response.data;
     }
+
+    async addCategory(param: { name: string }) {
+        const response = await axios.post(`${API_BASE_URL}/categories`, param);
+        return response.data;
+    }
+
+    async deleteCategory(id: number) {
+        const response = await axios.delete(`${API_BASE_URL}/categories/${id}`)
+        return response.data;
+    }
 }
 
 export const expensesService = new ExpensesService();

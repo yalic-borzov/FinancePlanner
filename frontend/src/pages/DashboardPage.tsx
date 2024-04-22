@@ -1,48 +1,39 @@
 import React, {useEffect, useState} from 'react';
-import {Category, ExpensesStats as ExpensesStatsType} from '../types';
-import {expensesService} from "../api/expensesService.ts";
-import Header from "../components/Header.tsx";
-import Numpad from "../components/Numpad.tsx";
-import PrimaryButton from "../components/PrimaryButton.tsx";
-import ExpensesChart from "../components/ExpensesChart.tsx";
-import Accordion from "../components/AccordionforStats.tsx";
-import ExpensesStats from "../components/ExpensesStats.tsx";
-import ExpensesList from "../components/ExpensesList.tsx";
-import {useExpenses} from "../context/ExpensesContext.tsx";
+import {expensesService} from "../api/expensesService";
+import Header from "../components/Header";
+import Numpad from "../components/Numpad";
+import PrimaryButton from "../components/PrimaryButton";
+import ExpensesList from "../components/ExpensesList";
+import {useExpenses} from "../context/ExpensesContext";
+import AccordionforStats from "../components/AccordionforStats";
+import ExpensesStats from "../components/ExpensesStats";
+import ExpensesChart from "../components/ExpensesChart";
 
 const DashboardPage: React.FC = () => {
     const [amount, setAmount] = useState('');
-    const [categories, setCategories] = useState<Category[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string>('');
-    const [stats, setStats] = useState<ExpensesStatsType | null>(null);
-    const {fetchExpenses} = useExpenses();
-    useEffect(() => {
-        expensesService.getCategories().then(setCategories).catch(console.error);
-        expensesService.getExpensesStats('month').then(setStats).catch(console.error);
-    }, []);
+    const [selectedPeriod, setSelectedPeriod] = useState('month'); // Месяц по умолчанию
+    const {fetchExpenses, fetchCategories, categories, fetchExpensesStats, stats} = useExpenses();
 
+    useEffect(() => {
+        fetchCategories();
+        fetchExpensesStats(selectedPeriod); // Изначально загружаем статистику
+    }, [fetchCategories, fetchExpensesStats, selectedPeriod]);
 
     const handleAddExpense = async () => {
         if (!amount || !selectedCategory) {
-            alert('Please enter all required fields.');
+            alert('Заполните все поля');
             return;
         }
         try {
-            await expensesService.createExpense(
-                parseInt(selectedCategory),
-                parseFloat(amount),
-                ''
-            );
+            await expensesService.createExpense(parseInt(selectedCategory), parseFloat(amount), '');
             fetchExpenses();
-            alert('Expense added successfully!');
-            // Очистить поля формы или обновить состояние после успешного добавления
+            alert('Трата успешно добавлена');
             setAmount('');
             setSelectedCategory('');
-
-
         } catch (error) {
             console.error('Error adding expense:', error);
-            alert('Failed to add expense.');
+            alert('Не удалось добавить');
         }
     };
 
@@ -50,7 +41,7 @@ const DashboardPage: React.FC = () => {
         <>
             <Header/>
             <div className="container my-4">
-                <h1>Dashboard</h1>
+                <h1>Список трат</h1>
                 <div>
                     <div className="numpad__block">
                         <div className="input-group mb-3">
@@ -67,18 +58,31 @@ const DashboardPage: React.FC = () => {
                                 </option>
                             ))}
                         </select><br/>
-                        <PrimaryButton onClick={() => handleAddExpense()} text={'Добавить трату'}/>
+                        <PrimaryButton onClick={handleAddExpense} text={'Добавить трату'}/>
 
                     </div>
 
                     <div className="block__stats">
-                        <Accordion>
-                            {stats && <ExpensesChart stats={stats}/>}
-                            <ExpensesStats period="month"/>
-                        </Accordion>
+
+                        <AccordionforStats title="Статистика" fetchStats={() => fetchExpensesStats(selectedPeriod)}>
+                            <div className="btn-group" role="group">
+                                <input type="radio"
+                                       className={`btn-check ${selectedPeriod === 'month' ? 'active' : ''}`}
+                                       name="btnradio" id="btnradio1"
+                                       autoComplete="off" onClick={() => setSelectedPeriod('month')} checked/>
+                                <label className="btn btn-outline-primary" htmlFor="btnradio1">Месяц</label>
+
+                                <input type="radio"
+                                       className={`btn-check ${selectedPeriod === 'week' ? 'active' : ''}`}
+                                       name="btnradio" id="btnradio2"
+                                       autoComplete="off" onClick={() => setSelectedPeriod('week')}/>
+                                <label className="btn btn-outline-primary" htmlFor="btnradio2">Неделя</label>
+                            </div>
+                            <ExpensesChart stats={stats}/>
+                            <ExpensesStats period={selectedPeriod}/>
+                        </AccordionforStats>
                     </div>
                     <div className="history__block">
-
                         <ExpensesList categories={categories}/>
                     </div>
                 </div>

@@ -49,6 +49,33 @@ h1 {
     width: 100%;
     padding: 10px;
     margin-top: 10px;
-    box-shadow: 0 10px 14px rgba(0,0,0,.05);
+    box-shadow: 0 10px 14px rgba(0, 0, 0, .05);
     border-radius: 30px;
+}
+
+.remove__button {
+    float: right;
+}
+
+.element span {
+    font-size: 20px;
+    font-family: DeltaGothic, sans-serif;
+}
+.element .col-md-8{
+    align-content: center;
+}
+.element .col{
+    align-content: center;
+}
+
+@media (max-width: 767px) {
+    .numpad__block {
+        max-width: 100%;
+        margin: auto;
+    }
+
+    .block__stats {
+        max-width: 100%;
+        margin: 30px auto auto;
+    }
 }
