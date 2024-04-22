@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Category, Expense} from '../types';
 import {useExpenses} from "../context/ExpensesContext.tsx";
 import {Button} from "react-bootstrap";
+import TimeDisplay from "./TimeDisplay.tsx";
 
 interface ExpensesListProps {
     categories: Category[];
@@ -42,11 +43,24 @@ const ExpensesList: React.FC<ExpensesListProps> = ({categories}) => {
                 </select>
                 {filteredExpenses.map(expense => (
                     <div className="element" key={expense.id}>
-                        <span>
-                            {expense.date}: {categories.find(c => c.id === expense.category_id)?.name} - {expense.amount} {expense.description}
-                        </span>
-                        <Button variant={"outline-danger"} className={"remove__button"}
-                                onClick={() => deleteExpense(expense.id)}>Удалить</Button>
+                        <div className="row">
+                            <div className="col-md-7">
+                                <span>
+                                    {categories.find(c => c.id === expense.category_id)?.name} - {expense.amount} {expense.description}
+                                </span>
+                            </div>
+                            <div className="col">
+                                <span>
+                                    <TimeDisplay dateString={expense.date}/>
+                                </span>
+                            </div>
+                            <div className="col">
+
+                                <Button variant={"outline-danger"} className={"remove__button"}
+                                        onClick={() => deleteExpense(expense.id)}>Удалить</Button>
+                            </div>
+                        </div>
+
                     </div>
                 ))}
             </div>

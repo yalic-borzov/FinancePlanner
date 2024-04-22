@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { expensesService } from "../api/expensesService";
+import React, {useEffect, useState} from 'react';
+import {expensesService} from "../api/expensesService";
 import Header from "../components/Header";
 import Numpad from "../components/Numpad";
 import PrimaryButton from "../components/PrimaryButton";
 import ExpensesList from "../components/ExpensesList";
-import { useExpenses } from "../context/ExpensesContext";
+import {useExpenses} from "../context/ExpensesContext";
 import AccordionforStats from "../components/AccordionforStats";
 import ExpensesStats from "../components/ExpensesStats";
 import ExpensesChart from "../components/ExpensesChart";
@@ -13,7 +13,7 @@ const DashboardPage: React.FC = () => {
     const [amount, setAmount] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<string>('');
     const [selectedPeriod, setSelectedPeriod] = useState('month'); // Месяц по умолчанию
-    const { fetchExpenses, fetchCategories, categories, fetchExpensesStats, stats } = useExpenses();
+    const {fetchExpenses, fetchCategories, categories, fetchExpensesStats, stats} = useExpenses();
 
     useEffect(() => {
         fetchCategories();
@@ -59,16 +59,25 @@ const DashboardPage: React.FC = () => {
                             ))}
                         </select><br/>
                         <PrimaryButton onClick={handleAddExpense} text={'Добавить трату'}/>
-                        <div className="period-selector">
-                            <button className={selectedPeriod === 'month' ? 'active' : ''}
-                                    onClick={() => setSelectedPeriod('month')}>Месяц</button>
-                            <button className={selectedPeriod === 'week' ? 'active' : ''}
-                                    onClick={() => setSelectedPeriod('week')}>Неделя</button>
-                        </div>
+
                     </div>
 
                     <div className="block__stats">
+
                         <AccordionforStats title="Статистика" fetchStats={() => fetchExpensesStats(selectedPeriod)}>
+                            <div className="btn-group" role="group">
+                                <input type="radio"
+                                       className={`btn-check ${selectedPeriod === 'month' ? 'active' : ''}`}
+                                       name="btnradio" id="btnradio1"
+                                       autoComplete="off" onClick={() => setSelectedPeriod('month')} checked/>
+                                <label className="btn btn-outline-primary" htmlFor="btnradio1">Месяц</label>
+
+                                <input type="radio"
+                                       className={`btn-check ${selectedPeriod === 'week' ? 'active' : ''}`}
+                                       name="btnradio" id="btnradio2"
+                                       autoComplete="off" onClick={() => setSelectedPeriod('week')}/>
+                                <label className="btn btn-outline-primary" htmlFor="btnradio2">Неделя</label>
+                            </div>
                             <ExpensesChart stats={stats}/>
                             <ExpensesStats period={selectedPeriod}/>
                         </AccordionforStats>

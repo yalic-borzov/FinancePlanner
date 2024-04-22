@@ -57,6 +57,17 @@ h1 {
     float: right;
 }
 
+.element span {
+    font-size: 20px;
+    font-family: DeltaGothic, sans-serif;
+}
+.element .col-md-8{
+    align-content: center;
+}
+.element .col{
+    align-content: center;
+}
+
 @media (max-width: 767px) {
     .numpad__block {
         max-width: 100%;
