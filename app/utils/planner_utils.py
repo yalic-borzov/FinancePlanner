@@ -1,5 +1,6 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 
+import pytz
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -7,19 +8,29 @@ from app.models import Expense, Category
 
 
 def calculate_date_range(period):
-    today = datetime.today()
+    now = datetime.now(pytz.utc)
+    today = now.date()
     if period == "week":
-        start_date = today - timedelta(days=today.weekday())
-        end_date = start_date + timedelta(days=7)
+        start_date = (
+            datetime.combine(today, time.min) - timedelta(days=today.weekday())
+        ).replace(tzinfo=pytz.utc)
+        end_date = (start_date + timedelta(days=6, seconds=86399)).replace(
+            tzinfo=pytz.utc
+        )
     elif period == "month":
-        start_date = today.replace(day=1)
-        next_month = today.replace(day=28) + timedelta(days=4)
-        end_date = next_month - timedelta(days=next_month.day)
+        start_date = datetime.combine(today.replace(day=1), time.min).replace(
+            tzinfo=pytz.utc
+        )
+        end_date = (start_date + timedelta(days=32)).replace(
+            day=1, tzinfo=pytz.utc
+        ) - timedelta(seconds=1)
     else:
-        # Возвращаем текущий месяц по умолчанию
-        start_date = today.replace(day=1)
-        next_month = today.replace(day=28) + timedelta(days=4)
-        end_date = next_month - timedelta(days=next_month.day)
+        start_date = datetime.combine(today.replace(day=1), time.min).replace(
+            tzinfo=pytz.utc
+        )
+        end_date = (start_date + timedelta(days=32)).replace(
+            day=1, tzinfo=pytz.utc
+        ) - timedelta(seconds=1)
 
     return start_date, end_date
 
@@ -37,7 +48,6 @@ async def calculate_expenses_stats(
         )
         .group_by(Expense.category_id)
         .order_by(func.sum(Expense.amount).desc())
-        .limit(top_limit)  # Ограничение количества категорий
     )
     expenses_by_category = result.all()
 

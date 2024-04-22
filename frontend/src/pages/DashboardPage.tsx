@@ -1,27 +1,24 @@
-import React, {useEffect, useState} from 'react';
-import {expensesService} from "../api/expensesService.ts";
-import Header from "../components/Header.tsx";
-import Numpad from "../components/Numpad.tsx";
-import PrimaryButton from "../components/PrimaryButton.tsx";
-import ExpensesList from "../components/ExpensesList.tsx";
-import {useExpenses} from "../context/ExpensesContext.tsx";
-import AccordionforStats from "../components/AccordionforStats.tsx";
-import ExpensesStats from "../components/ExpensesStats.tsx";
-import ExpensesChart from "../components/ExpensesChart.tsx";
-
+import React, { useEffect, useState } from 'react';
+import { expensesService } from "../api/expensesService";
+import Header from "../components/Header";
+import Numpad from "../components/Numpad";
+import PrimaryButton from "../components/PrimaryButton";
+import ExpensesList from "../components/ExpensesList";
+import { useExpenses } from "../context/ExpensesContext";
+import AccordionforStats from "../components/AccordionforStats";
+import ExpensesStats from "../components/ExpensesStats";
+import ExpensesChart from "../components/ExpensesChart";
 
 const DashboardPage: React.FC = () => {
     const [amount, setAmount] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<string>('');
-    const {fetchExpenses} = useExpenses();
-    const {fetchCategories, categories} = useExpenses();
-    const {fetchExpensesStats} = useExpenses();
-    const {stats} = useExpenses();
+    const [selectedPeriod, setSelectedPeriod] = useState('month'); // Месяц по умолчанию
+    const { fetchExpenses, fetchCategories, categories, fetchExpensesStats, stats } = useExpenses();
 
     useEffect(() => {
         fetchCategories();
-    }, [fetchCategories]);
-
+        fetchExpensesStats(selectedPeriod); // Изначально загружаем статистику
+    }, [fetchCategories, fetchExpensesStats, selectedPeriod]);
 
     const handleAddExpense = async () => {
         if (!amount || !selectedCategory) {
@@ -29,18 +26,11 @@ const DashboardPage: React.FC = () => {
             return;
         }
         try {
-            await expensesService.createExpense(
-                parseInt(selectedCategory),
-                parseFloat(amount),
-                ''
-            );
+            await expensesService.createExpense(parseInt(selectedCategory), parseFloat(amount), '');
             fetchExpenses();
             alert('Трата успешно добавлена');
-            // Очистить поля формы или обновить состояние после успешного добавления
             setAmount('');
             setSelectedCategory('');
-
-
         } catch (error) {
             console.error('Error adding expense:', error);
             alert('Не удалось добавить');
@@ -68,19 +58,22 @@ const DashboardPage: React.FC = () => {
                                 </option>
                             ))}
                         </select><br/>
-                        <PrimaryButton onClick={() => handleAddExpense()} text={'Добавить трату'}/>
-
+                        <PrimaryButton onClick={handleAddExpense} text={'Добавить трату'}/>
+                        <div className="period-selector">
+                            <button className={selectedPeriod === 'month' ? 'active' : ''}
+                                    onClick={() => setSelectedPeriod('month')}>Месяц</button>
+                            <button className={selectedPeriod === 'week' ? 'active' : ''}
+                                    onClick={() => setSelectedPeriod('week')}>Неделя</button>
+                        </div>
                     </div>
 
                     <div className="block__stats">
-                        <AccordionforStats title="Статистика" fetchStats={() => fetchExpensesStats('month')}>
+                        <AccordionforStats title="Статистика" fetchStats={() => fetchExpensesStats(selectedPeriod)}>
                             <ExpensesChart stats={stats}/>
-                            <ExpensesStats period='month'/>
+                            <ExpensesStats period={selectedPeriod}/>
                         </AccordionforStats>
-
                     </div>
                     <div className="history__block">
-
                         <ExpensesList categories={categories}/>
                     </div>
                 </div>

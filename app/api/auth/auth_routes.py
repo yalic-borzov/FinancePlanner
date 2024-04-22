@@ -1,4 +1,3 @@
-from typing import Tuple
 
 from flask import Blueprint, request, Response, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -43,4 +42,3 @@ async def get_user_info() -> tuple[Response, int]:
         return jsonify({"error": "User not found"}), 404
 
     return jsonify({"username": username}), 200
-
