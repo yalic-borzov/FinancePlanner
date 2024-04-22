@@ -1,18 +1,33 @@
-import React, {ReactNode} from 'react';
+import React, {useState} from 'react';
 import {Accordion} from "react-bootstrap";
+import {AccordionEventKey} from "react-bootstrap/AccordionContext";
 
 interface AccordionProps {
     title?: string;
-    children?: ReactNode;
+    fetchStats: () => void;  // Функция для загрузки данных
+    children: React.ReactNode;
 }
 
-const AccordionforStats: React.FC<AccordionProps> = ({children}) => {
+const AccordionforStats: React.FC<AccordionProps> = ({title, fetchStats, children}) => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const handleToggle = (eventKey: AccordionEventKey) => {
+        const currentlyOpen = eventKey === "0";
+        if (currentlyOpen !== isOpen) {
+            setIsOpen(currentlyOpen);
+            if (currentlyOpen) {
+                fetchStats();  // Вызовется только при открытии аккордеона
+            }
+        }
+    };
+
+
     return (
-        <Accordion defaultActiveKey="1">
+        <Accordion defaultActiveKey="1" onSelect={handleToggle}>
             <Accordion.Item eventKey="0">
-                <Accordion.Header>Статистика</Accordion.Header>
+                <Accordion.Header>{title || "Статистика"}</Accordion.Header>
                 <Accordion.Body>
-                    {children}
+                    {isOpen && children}
                 </Accordion.Body>
             </Accordion.Item>
         </Accordion>

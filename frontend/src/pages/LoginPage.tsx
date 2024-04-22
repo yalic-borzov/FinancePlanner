@@ -5,21 +5,22 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import InputField from "../components/InputField.tsx";
 import PrimaryButton from "../components/PrimaryButton.tsx";
 import {authService} from "../api/authService.ts";
+import {useAuth} from "../context/AuthContext.tsx";
 
 const LoginPage: React.FC = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
+    const {login} = useAuth();
     const handleLogin = async () => {
         try {
             let response = await authService.login(username, password);
             const {access_token} = response;
             console.log('Login successful:', access_token);
-            localStorage.setItem('token', access_token);
+            login(access_token);
             navigate('/dashboard');
         } catch (error) {
-            // Теперь мы используем утверждение типа, чтобы обработать ошибку
             if (axios.isAxiosError(error) && error.response) {
                 console.error('Failed to login', error.response.data);
                 alert('Login failed: ' + error.response.data.message);

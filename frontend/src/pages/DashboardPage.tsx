@@ -1,28 +1,23 @@
 import React, {useEffect, useState} from 'react';
-import {ExpensesStats as ExpensesStatsType} from '../types';
 import {expensesService} from "../api/expensesService.ts";
 import Header from "../components/Header.tsx";
 import Numpad from "../components/Numpad.tsx";
 import PrimaryButton from "../components/PrimaryButton.tsx";
-import ExpensesChart from "../components/ExpensesChart.tsx";
-import Accordion from "../components/AccordionforStats.tsx";
-import ExpensesStats from "../components/ExpensesStats.tsx";
 import ExpensesList from "../components/ExpensesList.tsx";
 import {useExpenses} from "../context/ExpensesContext.tsx";
-import AddCategoryForm from "../components/AddCategoryForm.tsx";
+import AccordionforStats from "../components/AccordionforStats.tsx";
+import ExpensesStats from "../components/ExpensesStats.tsx";
+import ExpensesChart from "../components/ExpensesChart.tsx";
 
 
 const DashboardPage: React.FC = () => {
     const [amount, setAmount] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<string>('');
-    const [stats, setStats] = useState<ExpensesStatsType | null>(null);
     const {fetchExpenses} = useExpenses();
     const {fetchCategories, categories} = useExpenses();
+    const {fetchExpensesStats} = useExpenses();
+    const {stats} = useExpenses();
 
-    useEffect(() => {
-        // expensesService.getCategories().then(setCategories).catch(console.error);
-        expensesService.getExpensesStats('month').then(setStats).catch(console.error);
-    }, []);
     useEffect(() => {
         fetchCategories();
     }, [fetchCategories]);
@@ -57,7 +52,6 @@ const DashboardPage: React.FC = () => {
             <Header/>
             <div className="container my-4">
                 <h1>Список трат</h1>
-                <AddCategoryForm/>
                 <div>
                     <div className="numpad__block">
                         <div className="input-group mb-3">
@@ -79,10 +73,11 @@ const DashboardPage: React.FC = () => {
                     </div>
 
                     <div className="block__stats">
-                        <Accordion>
-                            {stats && <ExpensesChart stats={stats}/>}
-                            <ExpensesStats period="month"/>
-                        </Accordion>
+                        <AccordionforStats title="Статистика" fetchStats={() => fetchExpensesStats('month')}>
+                            <ExpensesChart stats={stats}/>
+                            <ExpensesStats period='month'/>
+                        </AccordionforStats>
+
                     </div>
                     <div className="history__block">
 

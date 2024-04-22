@@ -6,7 +6,7 @@ interface ProtectedRouteProps {
     path?: string;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({path}) => {
+const ProtectedRoute: React.FC<ProtectedRouteProps> = () => {
     const {isLoggedIn} = useAuth();
 
     if (!isLoggedIn) {

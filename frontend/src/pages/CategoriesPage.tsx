@@ -20,10 +20,17 @@ const CategoriesPage: React.FC = () => {
 
                     {categories.map(category => (
                         <div className="element" key={category.id}>
-                        <span key={category.id}>
-                            {category.name}
-                        </span>
-                            <Button variant={"danger"}>Удалить категорию</Button>
+                            <div className="row">
+                                <div className="col">
+                                      <span key={category.id}>
+                                        {category.name}
+                                        </span>
+                                </div>
+                                <div className="col">
+                                    <Button variant={"danger"}>Удалить категорию</Button>
+                                </div>
+                            </div>
+
                         </div>
                     ))}
                 </div>

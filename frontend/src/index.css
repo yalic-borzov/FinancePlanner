@@ -52,7 +52,8 @@ h1 {
     box-shadow: 0 10px 14px rgba(0, 0, 0, .05);
     border-radius: 30px;
 }
-.remove__button{
+
+.remove__button {
     float: right;
 }
 

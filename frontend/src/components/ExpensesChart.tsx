@@ -7,14 +7,14 @@ interface ExpensesChartProps {
         top_categories: {
             amount: number;
             category_name: string;
-        }[];
+        }[] | null; // Допускаем, что top_categories может быть null
         message?: string;
-    };
+    } | null; // Допускаем, что stats может быть null
 }
 
 const ExpensesChart: React.FC<ExpensesChartProps> = ({stats}) => {
-    if (!stats || stats.message || !stats.top_categories.length) {
-        // Проверяем наличие сообщения об ошибке или пустой массив категорий
+    if (!stats || !stats.top_categories || !stats.top_categories.length) {
+        // Проверяем наличие данных, наличие массива категорий и его длину
         return <p>{stats?.message || 'Нет данных для графика'}</p>;
     }
 
@@ -25,7 +25,6 @@ const ExpensesChart: React.FC<ExpensesChartProps> = ({stats}) => {
                 label: 'Расходы по категориям',
                 data: stats.top_categories.map((c) => c.amount),
                 backgroundColor: [
-                    // Здесь можно определить цвета для каждой категории
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
                     'rgba(255, 206, 86, 0.2)',
@@ -34,7 +33,6 @@ const ExpensesChart: React.FC<ExpensesChartProps> = ({stats}) => {
                     'rgba(255, 159, 64, 0.2)'
                 ],
                 borderColor: [
-                    // Здесь можно определить цвета границ для каждой категории
                     'rgba(255, 99, 132, 1)',
                     'rgba(54, 162, 235, 1)',
                     'rgba(255, 206, 86, 1)',
