@@ -5,7 +5,7 @@ from flask_jwt_extended import JWTManager
 
 from app.api.auth.auth_routes import auth
 from app.api.planner.planner_routes import planner
-from app.config import JWT_SECRET
+from app.config import JWT_SECRET, DEBUG
 
 
 def create_app() -> Flask:
@@ -20,4 +20,4 @@ def create_app() -> Flask:
 
 if __name__ == "__main__":
     app = create_app()
-    app.run(debug=True)
+    app.run(debug=DEBUG)
