@@ -6,6 +6,7 @@ import AccountSelector from "../components/AccountSelector.tsx";
 import ExpensesChart from "../components/ExpensesChart.tsx";
 import ExpensesStats from "../components/ExpensesStats.tsx";
 import AccordionforStats from "../components/AccordionforStats.tsx";
+import AddAccountModal from "../components/AddAccountModal.tsx";
 
 const DashboardPage: React.FC = () => {
     // const [amount, setAmount] = useState('');
@@ -13,6 +14,9 @@ const DashboardPage: React.FC = () => {
     const {fetchCategories, categories, fetchExpensesStats, stats} = useExpenses();
     const {expenses} = useExpenses();
 
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
     useEffect(() => {
         fetchCategories();
     }, [fetchCategories, selectedPeriod]);
@@ -20,11 +24,16 @@ const DashboardPage: React.FC = () => {
     return (
         <>
             <Header/>
+            <AddAccountModal show={show} handleClose={handleClose}/>
+
             <div className="container my-4">
                 <div className="row">
                     <div className="col">
                         <h1>Ваши счета:</h1>
                         <AccountSelector/>
+                        <div className="element">
+                            <span onClick={handleShow} className={"span-title pointer"}><i className="bi bi-plus-lg"></i>Создать новый счет</span>
+                        </div>
                     </div>
                     <div className="col-md-7">
                         <h1>Последние транзакции:</h1>
@@ -55,6 +64,7 @@ const DashboardPage: React.FC = () => {
                         {/*<h1>Последние транзакции:</h1>*/}
                         <div className="history__block">
                             <ExpensesList categories={categories} expenses={expenses}/>
+
                         </div>
                     </div>
                 </div>

@@ -26,7 +26,7 @@ const AccordionforStats: React.FC<AccordionProps> = ({title, fetchStats, childre
         <Accordion defaultActiveKey="1" onSelect={handleToggle}>
             <Accordion.Item eventKey="0">
                 <Accordion.Header>{title || "Статистика"}</Accordion.Header>
-                <Accordion.Body>
+                <Accordion.Body className={"stats__accordion__body"}>
                     {isOpen && children}
                 </Accordion.Body>
             </Accordion.Item>

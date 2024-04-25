@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.user import User
 from app.schemas.user import UserCreate  # Импорт схемы Pydantic
+from app.utils.planner_utils import create_base_categories, create_base_account
 
 
 async def register_handler(data: Request, session: AsyncSession):
@@ -20,7 +21,11 @@ async def register_handler(data: Request, session: AsyncSession):
 
     new_user = User(username=user_data.username)
     new_user.set_password(user_data.password)
+
     session.add(new_user)
     await session.commit()
+    await session.refresh(new_user)
+    await create_base_categories(session, user_id=new_user.id)
+    await create_base_account(session, user_id=new_user.id)
 
     return jsonify({"message": "User created successfully"}), 201

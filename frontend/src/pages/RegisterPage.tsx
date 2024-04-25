@@ -51,6 +51,7 @@ const RegisterPage: React.FC = () => {
                         value={email}
                         onChange={setEmail}
                         placeholder="Email"
+
                     />
                     <InputField
                         type="password"

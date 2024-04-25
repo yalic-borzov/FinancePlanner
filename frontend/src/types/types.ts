@@ -1,4 +1,6 @@
 // В файле src/types/types.ts
+import {ReactNode} from "react";
+
 export interface Category {
     id: number;
     name: string;
@@ -48,3 +50,11 @@ export interface ExpensesStats {
     total_count: number;
 }
 
+export interface IBasedModal {
+    Title?: string,
+    show?: boolean,
+    handleClose?: () => void;
+    addFunction?: () => void;
+    addText?: string;
+    children?: ReactNode;
+}

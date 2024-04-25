@@ -19,7 +19,7 @@ const AppContent: React.FC = () => {
 
     return (
         <Routes>
-            <Route path="/" element={<HomePage/>}/>
+            <Route path="/" element={isLoggedIn ? <Navigate to="/dashboard"/> : <HomePage/>}/>
             <Route path="/login" element={isLoggedIn ? <Navigate to="/dashboard"/> : <LoginPage/>}/>
             <Route path="/register" element={<RegisterPage/>}/>
             <Route element={<ProtectedRoute/>}>

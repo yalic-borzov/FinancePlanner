@@ -38,8 +38,12 @@ h1 {
 }
 
 .block__stats {
-    max-width: 25%;
-    margin: 30px auto auto;
+    margin: 10px;
+}
+
+.stats__accordion__body {
+    margin: auto;
+    max-width: 50%;
 }
 
 .history__block {
@@ -122,13 +126,19 @@ h1 {
 .balance-span {
     font-size: 30px !important;
 }
-.balance-col{
+
+.balance-col {
     text-align: right;
 }
 
-.navbar{
-    background: #772D8B;
+.navbar {
+    background: #BE4CDD;
 }
-a{
+
+a {
     color: #6096BA;
+}
+
+.pointer {
+    cursor: pointer;
 }

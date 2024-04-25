@@ -8,7 +8,7 @@ import {Button} from "react-bootstrap";
 import AddExpenseModal from "../components/AddExpenseModal.tsx";
 
 const AccountPage = () => {
-    const {accountId} = useParams(); // Получаем ID счета из URL
+    const {accountId} = useParams();
     const {accounts, fetchExpenses, expenses} = useExpenses();
     const {fetchAccounts} = useExpenses();
     const {categories, fetchCategories} = useExpenses();
@@ -54,6 +54,7 @@ const AccountPage = () => {
                 <br/>
                 <ExpensesList expenses={expenses.filter(expense => expense.account_id === account.id)}
                               categories={categories}/>
+
             </div>
 
         </div>
