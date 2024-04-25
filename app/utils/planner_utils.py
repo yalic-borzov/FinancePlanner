@@ -36,25 +36,30 @@ def calculate_date_range(period):
 
 
 async def calculate_expenses_stats(
-    user_id, start_date, end_date, session: AsyncSession, top_limit=3
+    user_id: int, start_date, end_date, session: AsyncSession, account_id: int = None
 ):
-    # Запрос для получения суммы расходов по каждой категории, сортировка по убыванию
-    result = await session.execute(
-        select(Expense.category_id, func.sum(Expense.amount).label("total_amount"))
-        .where(
-            Expense.user_id == user_id,
-            Expense.date >= start_date,
-            Expense.date <= end_date,
-        )
-        .group_by(Expense.category_id)
-        .order_by(func.sum(Expense.amount).desc())
+    # Добавление условия для фильтрации по account_id, если оно предоставлено
+    query = select(
+        Expense.category_id, func.sum(Expense.amount).label("total_amount")
+    ).where(
+        Expense.user_id == user_id,
+        Expense.date >= start_date,
+        Expense.date <= end_date,
     )
+    if account_id:
+        query = query.where(Expense.account_id == int(account_id))
+
+    query = query.group_by(Expense.category_id).order_by(
+        func.sum(Expense.amount).desc()
+    )
+
+    result = await session.execute(query)
     expenses_by_category = result.all()
 
     if not expenses_by_category:
         return {"message": "No expenses found for the given period"}
 
-    # Сбор информации о топ категориях
+    # Сбор информации о категориях
     categories_info = []
     for category_id, amount in expenses_by_category:
         category_name = await get_category_name(category_id, session)

@@ -51,11 +51,7 @@ const AccountPage = () => {
                         </div>
                     </div>
                 </div>
-
-                {/* Numpad и другие управляющие элементы для взаимодействия со счетом */}
-
-                <h2>История трат</h2>
-                {/* Компонент ExpensesList используется для отображения трат, связанных со счетом */}
+                <br/>
                 <ExpensesList expenses={expenses.filter(expense => expense.account_id === account.id)}
                               categories={categories}/>
             </div>

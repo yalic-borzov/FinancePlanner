@@ -19,7 +19,6 @@ const AccountSelector: React.FC = () => {
                         <span>Трат за месяц: {account.balance} руб</span>
                     </div>
                     <div className="account-actions">
-                        {/* Здесь могут быть дополнительные действия, например, редактирование счета */}
                     </div>
                 </div>
             ))}

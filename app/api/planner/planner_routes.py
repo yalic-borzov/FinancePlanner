@@ -47,7 +47,7 @@ async def get_expense(expense_id) -> tuple[Response, int]:
 @jwt_required()
 async def get_all_expenses() -> tuple[Response, int]:
     user_id = get_jwt_identity()
-    account_id = request.args.get('account_id')
+    account_id = request.args.get("account_id")
     if account_id is None:
         dep = await get_all_expenses_handler(user_id)
     else:
@@ -68,10 +68,12 @@ async def delete_expense(expense_id) -> tuple[Response, int]:
 async def get_expenses_stats():
     user_id = get_jwt_identity()
     period = request.args.get("period", "month")  # 'month', 'week' или custom dates
-
+    account_id = request.args.get("account_id")
     start_date, end_date = calculate_date_range(period)
     async with get_async_session() as session:
-        stats = await calculate_expenses_stats(user_id, start_date, end_date, session)
+        stats = await calculate_expenses_stats(
+            user_id, start_date, end_date, session, account_id
+        )
     return jsonify(stats), 200
 
 
