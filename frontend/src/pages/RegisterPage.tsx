@@ -39,30 +39,31 @@ const RegisterPage: React.FC = () => {
             <Header/>
             <div className="d-flex align-items-center justify-content-center" style={{height: '100vh'}}>
                 <div className="w-100" style={{maxWidth: '320px'}}>
-                    <h1 className="mb-3">Register</h1>
+                    <h1 className="mb-3">Создать аккаунт</h1>
                     <InputField
                         type="text"
                         value={username}
                         onChange={setUsername}
-                        placeholder="Username"
+                        placeholder="Имя пользователя"
                     />
                     <InputField
                         type="email"
                         value={email}
                         onChange={setEmail}
                         placeholder="Email"
+
                     />
                     <InputField
                         type="password"
                         value={password}
                         onChange={setPassword}
-                        placeholder="Password"
+                        placeholder="Пароль"
                     />
                     <InputField
                         type="password"
                         value={confirmPassword}
                         onChange={setConfirmPassword}
-                        placeholder="Confirm Password"
+                        placeholder="Еще раз пароль"
                     />
                     <PrimaryButton onClick={handleRegister} text={'Создать аккаунт'}/>
                 </div>

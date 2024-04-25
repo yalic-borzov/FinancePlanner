@@ -22,15 +22,29 @@ class Expense(Base):
     )
     description: Mapped[Optional[str]] = mapped_column(nullable=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=True)
+    account_id: Mapped[int] = mapped_column(ForeignKey("accounts.id"), nullable=True)
     user = relationship("User", back_populates="expenses")
     category = relationship("Category", back_populates="expenses")
+    account = relationship("Account", back_populates="expenses")
 
 
 class Category(Base):
     __tablename__ = "categories"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(unique=True, nullable=False)
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=True)
+    name: Mapped[str] = mapped_column(unique=False, nullable=False)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
     user: Mapped[User] = relationship("User", back_populates="categories")
     expenses: Mapped[Expense] = relationship("Expense", back_populates="category")
+
+
+class Account(Base):
+    __tablename__ = "accounts"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(unique=True, nullable=False)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=True)
+    user: Mapped[User] = relationship("User", back_populates="accounts")
+    balance: Mapped[float] = mapped_column(nullable=True)
+    description: Mapped[str] = mapped_column(nullable=True)
+    expenses: Mapped[Expense] = relationship("Expense", back_populates="account")

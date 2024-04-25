@@ -1,15 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {Category, Expense} from '../types';
+import {Category, Expense} from '../types/types.ts';
 import {useExpenses} from "../context/ExpensesContext.tsx";
 import {Button} from "react-bootstrap";
 import TimeDisplay from "./TimeDisplay.tsx";
 
 interface ExpensesListProps {
     categories: Category[];
+    expenses: Expense[];
 }
 
-const ExpensesList: React.FC<ExpensesListProps> = ({categories}) => {
-    const {expenses, deleteExpense} = useExpenses();
+const ExpensesList: React.FC<ExpensesListProps> = ({categories, expenses}) => {
+    const {deleteExpense} = useExpenses();
     const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
@@ -45,19 +46,26 @@ const ExpensesList: React.FC<ExpensesListProps> = ({categories}) => {
                     <div className="element" key={expense.id}>
                         <div className="row">
                             <div className="col-md-7">
+                                <span className={"span-title"}>
+                                    <i className="bi bi-tag"></i> {categories.find(c => c.id === expense.category_id)?.name}
+                                </span> <br/>
                                 <span>
-                                    {categories.find(c => c.id === expense.category_id)?.name} - {expense.amount} {expense.description}
+                                    <i className="bi bi-cash"></i> {expense.amount} руб
+                                </span> <br/>
+                                <span>
+                                    <i className="bi bi-chat-dots"></i> {expense.description}
                                 </span>
                             </div>
                             <div className="col">
                                 <span>
-                                    <TimeDisplay dateString={expense.date}/>
+                                    <TimeDisplay dateString={expense.date}/><br/>
+                                    <span><i className="bi bi-safe"></i> {expense.account.name}</span>
                                 </span>
                             </div>
                             <div className="col">
-
                                 <Button variant={"outline-danger"} className={"remove__button"}
-                                        onClick={() => deleteExpense(expense.id)}>Удалить</Button>
+                                        onClick={() => deleteExpense(expense.id)}><i
+                                    className="bi bi-x-lg"></i></Button>
                             </div>
                         </div>
 

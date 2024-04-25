@@ -37,15 +37,16 @@ const LoginPage: React.FC = () => {
                     type="text"
                     value={username}
                     onChange={setUsername}
-                    placeholder="Username"
+                    placeholder="Имя пользователя"
                 />
                 <InputField
                     type="password"
                     value={password}
                     onChange={setPassword}
-                    placeholder="Password"
+                    placeholder="Пароль"
                 />
                 <PrimaryButton onClick={handleLogin} text={'Войти'}/><br/><br/>
+                <Link to={"/register"}>Нету аккаунта? Создать аккаунт!</Link> <br/>
                 <Link to={"/"}>Назад, на главную</Link>
             </div>
         </div>

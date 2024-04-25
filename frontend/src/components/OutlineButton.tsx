@@ -1,5 +1,5 @@
 import React from 'react';
-import {SubmitButtonProps} from "../types";
+import {SubmitButtonProps} from "../types/types.ts";
 
 
 const OutlineButton: React.FC<SubmitButtonProps> = ({text, key, onClick}) => {

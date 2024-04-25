@@ -16,17 +16,17 @@ const AccordionforStats: React.FC<AccordionProps> = ({title, fetchStats, childre
         if (currentlyOpen !== isOpen) {
             setIsOpen(currentlyOpen);
             if (currentlyOpen) {
-                fetchStats();  // Вызовется только при открытии аккордеона
+                console.log("Opening:")
+                fetchStats();
             }
         }
     };
-
 
     return (
         <Accordion defaultActiveKey="1" onSelect={handleToggle}>
             <Accordion.Item eventKey="0">
                 <Accordion.Header>{title || "Статистика"}</Accordion.Header>
-                <Accordion.Body>
+                <Accordion.Body className={"stats__accordion__body"}>
                     {isOpen && children}
                 </Accordion.Body>
             </Accordion.Item>

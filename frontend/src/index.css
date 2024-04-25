@@ -33,13 +33,17 @@ h1 {
 }
 
 .numpad__block {
-    max-width: 30%;
+    max-width: 100%;
     margin: auto;
 }
 
 .block__stats {
-    max-width: 25%;
-    margin: 30px auto auto;
+    margin: 10px;
+}
+
+.stats__accordion__body {
+    margin: auto;
+    /*max-width: 50%;*/
 }
 
 .history__block {
@@ -49,22 +53,29 @@ h1 {
     width: 100%;
     padding: 10px;
     margin-top: 10px;
-    box-shadow: 0 10px 14px rgba(0, 0, 0, .05);
-    border-radius: 30px;
+    box-shadow: 0 10px 14px rgba(0, 0, 0, .15);
+    border-radius: 10px;
 }
 
 .remove__button {
     float: right;
 }
 
-.element span {
+.element .span-title {
     font-size: 20px;
     font-family: DeltaGothic, sans-serif;
 }
-.element .col-md-8{
+
+.element span {
+    font-size: 20px;
+    font-family: Oswald, sans-serif;
+}
+
+.element .col-md-8 {
     align-content: center;
 }
-.element .col{
+
+.element .col {
     align-content: center;
 }
 
@@ -78,4 +89,60 @@ h1 {
         max-width: 100%;
         margin: 30px auto auto;
     }
+}
+
+
+.account-selector {
+    display: flex;
+    flex-direction: column;
+}
+
+.account-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; /* Или ваше значение отступа */
+    padding: 10px;
+    background: #FFF; /* Или другой цвет фона */
+    border-radius: 10px; /* Или ваше значение скругления */
+    cursor: pointer;
+}
+
+.account-details {
+    margin-left: 10px; /* Отступ слева от иконки */
+}
+
+.account-name {
+    font-weight: bold;
+}
+
+.account-balance {
+    color: #666; /* Цвет текста баланса */
+}
+
+.account-actions {
+    margin-left: auto; /* Элементы действий прижаты к правому краю */
+}
+
+.balance-span {
+    font-size: 30px !important;
+}
+
+.balance-col {
+    text-align: right;
+}
+
+.navbar {
+    background: #BE4CDD;
+}
+
+a {
+    color: #6096BA;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.nav-link {
+    color: white !important;
 }
