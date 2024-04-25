@@ -28,6 +28,15 @@ class AuthService {
         }
     }
 
+    async getUser() {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/user`)
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
 }
 
 export const authService = new AuthService();

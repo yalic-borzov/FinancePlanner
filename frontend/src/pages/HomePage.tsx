@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from "../components/Header.tsx";
 import CardIcon from "../components/CardIcon.tsx";
-import PrimaryButtonLink from "../components/PrimaryButtonLink.tsx";
+import {Link} from "react-router-dom";
 
 const HomePage: React.FC = () => {
     return (
@@ -20,8 +20,8 @@ const HomePage: React.FC = () => {
                     </div>
                 </div>
                 <div className="auth__block">
-                    <PrimaryButtonLink text={'Войти'} link={"/login"}/> <br/>
-                    <PrimaryButtonLink text={'Регистрироваться'} link={"/register"}/> <br/>
+                    <Link className={"btn btn-primary w-100"} to={'/login'}>Войти</Link> <br/>
+                    <Link className={"btn btn-primary w-100"} to={'/register'}>Создать аккаунт</Link> <br/>
                 </div>
             </div>
         </>

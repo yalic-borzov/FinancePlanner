@@ -10,7 +10,7 @@ interface ExpensesContextType {
     accounts: Account[];
     stats: ExpensesStatsType | null;
     fetchExpenses: (accountId: number | null) => void;
-    fetchExpensesStats: (period: string) => void;
+    fetchExpensesStats: (period: string, accountId?: number | null) => void;
     fetchCategories: () => void;
     addCategory: (categoryName: string) => void;
     deleteExpense: (id: number) => void;
@@ -70,10 +70,10 @@ export const ExpensesProvider: React.FC<ExpenseProviderType> = ({children}) => {
         }
     }, []);
 
-    const fetchExpensesStats = useCallback(async (period: string) => {
+    const fetchExpensesStats = useCallback(async (period: string, accountId: number | null = null) => {
         try {
             console.log(`Fetching expenses stats for period: ${period}`);
-            const fetchedStats = await expensesService.getExpensesStats(period);
+            const fetchedStats = await expensesService.getExpensesStats(period, accountId);
             console.log('Fetched stats:', fetchedStats);
             setStats(fetchedStats);
         } catch (error) {

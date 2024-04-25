@@ -4,7 +4,6 @@ import React from "react";
 import {IBasedModal} from "../types/types.ts";
 
 
-
 const BasedModal: React.FC<IBasedModal> = ({show, handleClose, Title, children, addFunction, addText}) => {
     return (
         <>

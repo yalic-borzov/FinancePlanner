@@ -14,6 +14,7 @@ class ExpensesService {
         return response.data;
     }
 
+
     async getExpense(id: number): Promise<Expense> {
         const response = await axios.get(`${API_BASE_URL}/expenses/${id}`);
         return response.data;
@@ -41,8 +42,13 @@ class ExpensesService {
         return response.data;
     }
 
-    async getExpensesStats(period: string) {
-        const response = await axios.get(`${API_BASE_URL}/expenses/stats?period=${period}`);
+    async getExpensesStats(period: string, accountId: number | null) {
+        let response;
+        if (accountId != null) {
+            response = await axios.get(`${API_BASE_URL}/expenses/stats?period=${period}&?account_id=${accountId}`);
+        } else {
+            response = await axios.get(`${API_BASE_URL}/expenses/stats?period=${period}`);
+        }
         return response.data;
     }
 

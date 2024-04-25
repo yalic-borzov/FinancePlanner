@@ -3,15 +3,13 @@ import Header from "../components/Header";
 import ExpensesList from "../components/ExpensesList";
 import {useExpenses} from "../context/ExpensesContext";
 import AccountSelector from "../components/AccountSelector.tsx";
-import ExpensesChart from "../components/ExpensesChart.tsx";
-import ExpensesStats from "../components/ExpensesStats.tsx";
-import AccordionforStats from "../components/AccordionforStats.tsx";
 import AddAccountModal from "../components/AddAccountModal.tsx";
+import StatsAccorder from "../components/StatsAccorder.tsx";
 
 const DashboardPage: React.FC = () => {
     // const [amount, setAmount] = useState('');
-    const [selectedPeriod, setSelectedPeriod] = useState('month');
-    const {fetchCategories, categories, fetchExpensesStats, stats} = useExpenses();
+    const [selectedPeriod] = useState('month');
+    const {fetchCategories, categories} = useExpenses();
     const {expenses} = useExpenses();
 
     const [show, setShow] = useState(false);
@@ -32,7 +30,8 @@ const DashboardPage: React.FC = () => {
                         <h1>Ваши счета:</h1>
                         <AccountSelector/>
                         <div className="element">
-                            <span onClick={handleShow} className={"span-title pointer"}><i className="bi bi-plus-lg"></i>Создать новый счет</span>
+                            <span onClick={handleShow} className={"span-title pointer"}><i
+                                className="bi bi-plus-lg"></i>Создать новый счет</span>
                         </div>
                     </div>
                     <div className="col-md-7">
@@ -40,26 +39,7 @@ const DashboardPage: React.FC = () => {
 
 
                         <div className="block__stats">
-                            <AccordionforStats title="Статистика"
-                                               fetchStats={() => fetchExpensesStats(selectedPeriod)}>
-
-                                <div className="btn-group" role="group">
-                                    <input type="radio"
-                                           className={`btn-check ${selectedPeriod === 'month' ? 'active' : ''}`}
-                                           name="btnradio" id="btnradio1"
-                                           autoComplete="off" onClick={() => setSelectedPeriod('month')} checked/>
-                                    <label className="btn btn-outline-primary" htmlFor="btnradio1">Месяц</label>
-
-                                    <input type="radio"
-                                           className={`btn-check ${selectedPeriod === 'week' ? 'active' : ''}`}
-                                           name="btnradio" id="btnradio2"
-                                           autoComplete="off" onClick={() => setSelectedPeriod('week')}/>
-                                    <label className="btn btn-outline-primary" htmlFor="btnradio2">Неделя</label>
-                                </div>
-                                <ExpensesChart stats={stats}/>
-                                <ExpensesStats period={selectedPeriod}/>
-
-                            </AccordionforStats>
+                            <StatsAccorder/>
                         </div>
                         {/*<h1>Последние транзакции:</h1>*/}
                         <div className="history__block">

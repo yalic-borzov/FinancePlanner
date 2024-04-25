@@ -16,11 +16,11 @@ const AccordionforStats: React.FC<AccordionProps> = ({title, fetchStats, childre
         if (currentlyOpen !== isOpen) {
             setIsOpen(currentlyOpen);
             if (currentlyOpen) {
+                console.log("Opening:")
                 fetchStats();
             }
         }
     };
-
 
     return (
         <Accordion defaultActiveKey="1" onSelect={handleToggle}>

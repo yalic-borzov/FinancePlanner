@@ -6,6 +6,7 @@ import {useExpenses} from '../context/ExpensesContext';
 import Header from "../components/Header.tsx";
 import {Button} from "react-bootstrap";
 import AddExpenseModal from "../components/AddExpenseModal.tsx";
+import StatsAccorder from "../components/StatsAccorder.tsx";
 
 const AccountPage = () => {
     const {accountId} = useParams();
@@ -52,6 +53,10 @@ const AccountPage = () => {
                     </div>
                 </div>
                 <br/>
+
+                <div className="block__stats w-25 m-auto">
+                    <StatsAccorder accountId={Number(accountId)}/>
+                </div>
                 <ExpensesList expenses={expenses.filter(expense => expense.account_id === account.id)}
                               categories={categories}/>
 

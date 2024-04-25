@@ -43,7 +43,7 @@ h1 {
 
 .stats__accordion__body {
     margin: auto;
-    max-width: 50%;
+    /*max-width: 50%;*/
 }
 
 .history__block {
@@ -141,4 +141,8 @@ a {
 
 .pointer {
     cursor: pointer;
+}
+
+.nav-link {
+    color: white !important;
 }
