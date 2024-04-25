@@ -10,8 +10,9 @@ class User(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     username: Mapped[str] = mapped_column(unique=True, nullable=False)
     password_hash: Mapped[str] = mapped_column(nullable=False)
-    expenses = relationship("Expense", back_populates="user")  # связь с Expense
-    categories = relationship("Category", back_populates="user")  # связь с Category
+    expenses = relationship("Expense", back_populates="user")
+    categories = relationship("Category", back_populates="user")
+    accounts = relationship("Account", back_populates="user")
 
     def set_password(self, password: str):
         self.password_hash = generate_password_hash(password)

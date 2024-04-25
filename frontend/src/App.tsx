@@ -8,6 +8,7 @@ import {ExpensesProvider} from "./context/ExpensesContext.tsx";
 import CategoriesPage from "./pages/CategoriesPage.tsx";
 import {AuthProvider, useAuth} from "./context/AuthContext.tsx";
 import ProtectedRoute from "./components/ProtectedRoute.tsx";
+import AccountPage from "./pages/AccountPage.tsx";
 
 const AppContent: React.FC = () => {
     const {isLoggedIn, isAuthReady} = useAuth();
@@ -24,6 +25,7 @@ const AppContent: React.FC = () => {
             <Route element={<ProtectedRoute/>}>
                 <Route path="/dashboard" element={!isLoggedIn ? <Navigate to="/login"/> : <DashboardPage/>}/>
                 <Route path="/categories" element={<CategoriesPage/>}/>
+                <Route path="/account/:accountId" element={<AccountPage/>}/>
             </Route>
         </Routes>
     );

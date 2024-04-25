@@ -1,15 +1,15 @@
 import React from 'react';
 import {Doughnut} from 'react-chartjs-2';
-import 'chart.js/auto'; // Для регистрации контроллеров диаграммы
+import 'chart.js/auto';
 
 interface ExpensesChartProps {
     stats: {
         top_categories: {
             amount: number;
             category_name: string;
-        }[] | null; // Допускаем, что top_categories может быть null
+        }[] | null;
         message?: string;
-    } | null; // Допускаем, что stats может быть null
+    } | null;
 }
 
 const ExpensesChart: React.FC<ExpensesChartProps> = ({stats}) => {

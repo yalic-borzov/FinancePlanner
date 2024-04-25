@@ -11,7 +11,7 @@ const TimeDisplay: React.FC<{ dateString: string }> = ({dateString}) => {
         timeZone: 'Europe/Moscow'
     });
 
-    return <span>{timeString}</span>;
+    return <span><i className="bi bi-calendar3"></i> {timeString}</span>;
 };
 
 export default TimeDisplay;

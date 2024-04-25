@@ -1,19 +1,26 @@
 // ExpensesContext.tsx
 
 import React, {createContext, ReactNode, useCallback, useContext, useEffect, useState} from 'react';
-import {Category, Expense, ExpensesStats as ExpensesStatsType} from '../types';
+import {Account, Category, Expense, ExpensesStats as ExpensesStatsType} from '../types/types.ts';
 import {expensesService} from "../api/expensesService.ts";
 
 interface ExpensesContextType {
     expenses: Expense[];
     categories: Category[];
+    accounts: Account[];
     stats: ExpensesStatsType | null;
-    fetchExpenses: () => void;
+    fetchExpenses: (accountId: number | null) => void;
     fetchExpensesStats: (period: string) => void;
     fetchCategories: () => void;
     addCategory: (categoryName: string) => void;
     deleteExpense: (id: number) => void;
     deleteCategory: (id: number) => void;
+    fetchAccounts: () => void;
+    addAccount: (name: string) => void;
+    getAccountDetails: (id: number) => void;
+    selectedAccount: Account | null;
+    selectAccount: (accountId: number) => void;
+
 }
 
 interface ExpenseProviderType {
@@ -24,12 +31,18 @@ const ExpensesContext = createContext<ExpensesContextType>({
     expenses: [],
     categories: [],
     stats: null,
+    accounts: [],
+    selectedAccount: null,
     fetchExpenses: () => Promise.resolve(),
     fetchExpensesStats: () => Promise.resolve(),
     fetchCategories: () => Promise.resolve(),
     addCategory: () => Promise.resolve(),
     deleteExpense: () => Promise.resolve(),
-    deleteCategory: () => Promise.resolve()
+    deleteCategory: () => Promise.resolve(),
+    fetchAccounts: () => Promise.resolve(),
+    addAccount: () => Promise.resolve(),
+    getAccountDetails: () => Promise.resolve(),
+    selectAccount: () => Promise.resolve(),
 });
 
 
@@ -45,10 +58,12 @@ export const ExpensesProvider: React.FC<ExpenseProviderType> = ({children}) => {
     const [expenses, setExpenses] = useState<Expense[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
     const [stats, setStats] = useState<ExpensesStatsType | null>(null);
+    const [accounts, setAccounts] = useState<Account[]>([]);
+    const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
 
-    const fetchExpenses = useCallback(async () => {
+    const fetchExpenses = useCallback(async (accountId: number | null = null) => {
         try {
-            const fetchedExpenses = await expensesService.getExpenses();
+            const fetchedExpenses = await expensesService.getExpenses(accountId);
             setExpenses(fetchedExpenses);
         } catch (error) {
             console.error('Error fetching expenses:', error);
@@ -74,6 +89,11 @@ export const ExpensesProvider: React.FC<ExpenseProviderType> = ({children}) => {
             console.error('Error fetching categories:', error);
         }
     }, []);
+
+    const selectAccount = useCallback((accountId: number) => {
+        const account = accounts.find(acc => acc.id === accountId);
+        setSelectedAccount(account || null);
+    }, [accounts]);
 
     const addCategory = useCallback(async (categoryName: string) => {
         try {
@@ -102,6 +122,34 @@ export const ExpensesProvider: React.FC<ExpenseProviderType> = ({children}) => {
         }
     }, [fetchCategories])
 
+    const fetchAccounts = useCallback(async () => {
+        try {
+            const response = await expensesService.getAccounts();
+            setAccounts(response);
+        } catch (error) {
+            console.error('Error fetching accounts:', error);
+        }
+    }, []);
+
+    const addAccount = useCallback(async (name: string) => {
+        try {
+            const response = await expensesService.addAccount({name});
+            setAccounts(currentAccounts => [...currentAccounts, response]);
+            await fetchAccounts()
+        } catch (error) {
+            console.error('Error adding account:', error);
+        }
+    }, []);
+
+    const getAccountDetails = useCallback(async (id: number) => {
+        try {
+            const response = await expensesService.getAccount(id);
+            setAccounts(currentAccounts => [...currentAccounts, response])
+        } catch (error) {
+            console.error('Error fetching account details:', error);
+        }
+    }, []);
+
     useEffect(() => {
         fetchExpenses();
     }, [fetchExpenses]);
@@ -112,12 +160,18 @@ export const ExpensesProvider: React.FC<ExpenseProviderType> = ({children}) => {
                 expenses,
                 categories,
                 stats,
+                accounts,
                 fetchExpenses,
                 fetchCategories,
                 addCategory,
                 deleteExpense,
                 deleteCategory,
-                fetchExpensesStats
+                fetchExpensesStats,
+                fetchAccounts,
+                addAccount,
+                getAccountDetails,
+                selectedAccount,
+                selectAccount
             }}>
             {children}
         </ExpensesContext.Provider>

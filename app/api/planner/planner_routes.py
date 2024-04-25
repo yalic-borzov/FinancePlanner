@@ -1,10 +1,15 @@
 from flask import Blueprint, request, Response, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
+from app.api.planner.handlers.create_account import create_account_handler
 from app.api.planner.handlers.create_category import create_category_handler
 from app.api.planner.handlers.create_expense_handler import create_expense_handler
 from app.api.planner.handlers.delete_category_handler import delete_category_handler
 from app.api.planner.handlers.delete_expense_handler import delete_expense_handler
+from app.api.planner.handlers.get_account_handler import (
+    get_accounts_handler,
+    get_account_handler,
+)
 from app.api.planner.handlers.get_all_categories_handler import (
     get_all_categories_handler,
 )
@@ -42,7 +47,11 @@ async def get_expense(expense_id) -> tuple[Response, int]:
 @jwt_required()
 async def get_all_expenses() -> tuple[Response, int]:
     user_id = get_jwt_identity()
-    dep = await get_all_expenses_handler(user_id)
+    account_id = request.args.get('account_id')
+    if account_id is None:
+        dep = await get_all_expenses_handler(user_id)
+    else:
+        dep = await get_all_expenses_handler(user_id, int(account_id))
     return dep
 
 
@@ -95,3 +104,33 @@ async def get_category(category_id: int) -> tuple[Response, int]:
 async def delete_category(category_id: int) -> tuple[Response, int]:
     user_id = get_jwt_identity()
     return await delete_category_handler(category_id, user_id)
+
+
+@planner.route("/accounts", methods=["POST"])
+@jwt_required()
+async def create_account() -> tuple[Response, int]:
+    """Создание счета"""
+    user_id = get_jwt_identity()
+    data = request.get_json()
+    async with get_async_session() as session:
+        res = await create_account_handler(data, user_id, session)
+    return res
+
+
+@planner.route("/accounts", methods=["GET"])
+@jwt_required()
+async def get_accounts():
+    """Получение счета"""
+    user_id = get_jwt_identity()
+
+    async with get_async_session() as session:
+        return await get_accounts_handler(user_id=user_id, session=session)
+
+
+@planner.route("/accounts/<int:account_id>", methods=["GET"])
+@jwt_required()
+async def get_account(account_id: int):
+    user_id = get_jwt_identity()
+
+    async with get_async_session() as session:
+        return await get_account_handler(account_id, user_id, session)
