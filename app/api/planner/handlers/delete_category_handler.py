@@ -1,17 +1,21 @@
 from flask import jsonify, Response
-from sqlalchemy import select
+from sqlalchemy import select, delete as remover
 from sqlalchemy.exc import NoResultFound
 
 from app.db.db import get_async_session
-from app.models import Category
+from app.models import Category, Expense
 
 
 async def delete_category_handler(
-    category_id: int, user_id: int
+        category_id: int, user_id: int
 ) -> tuple[Response, int]:
     async with get_async_session() as session:
         async with session.begin():
             try:
+                await session.execute(
+                    remover(Expense).where(Expense.user_id == user_id, Expense.category_id == category_id)
+                )
+
                 result = await session.execute(
                     select(Category).filter(
                         Category.id == category_id, Category.user_id == user_id
