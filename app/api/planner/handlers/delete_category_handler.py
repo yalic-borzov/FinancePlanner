@@ -1,9 +1,10 @@
 from flask import jsonify, Response
-from sqlalchemy import select, delete as remover
+from sqlalchemy import select, delete as remover, update
 from sqlalchemy.exc import NoResultFound
 
 from app.db.db import get_async_session
 from app.models import Category, Expense
+from app.models.planner_models import Account
 
 
 async def delete_category_handler(
@@ -12,6 +13,19 @@ async def delete_category_handler(
     async with get_async_session() as session:
         async with session.begin():
             try:
+                result = await session.execute(
+                    select(Expense).where(
+                        Expense.user_id == user_id, Expense.category_id == category_id
+                    )
+                )
+                expenses = result.scalars().all()
+
+                for expense in expenses:
+                    await session.execute(
+                        update(Account)
+                        .where(Account.id == expense.account_id)
+                        .values(balance=Account.balance - expense.amount)
+                    )
                 await session.execute(
                     remover(Expense).where(
                         Expense.user_id == user_id, Expense.category_id == category_id
