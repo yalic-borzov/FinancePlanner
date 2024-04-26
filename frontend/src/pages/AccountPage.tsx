@@ -10,9 +10,9 @@ import StatsAccorder from "../components/StatsAccorder.tsx";
 
 const AccountPage = () => {
     const {accountId} = useParams();
-    const {accounts, fetchExpenses, expenses} = useExpenses();
+    const {fetchExpenses, expenses} = useExpenses();
     const {fetchAccounts} = useExpenses();
-    const {categories, fetchCategories} = useExpenses();
+    const {categories, fetchCategories, selectedAccount, selectAccount} = useExpenses();
     const [show, setShow] = useState(false);
     useEffect(() => {
         if (accountId) {
@@ -25,9 +25,9 @@ const AccountPage = () => {
     useEffect(() => {
         fetchAccounts();
     }, [fetchAccounts]);
-    const account = accounts.find(account => account.id.toString() === accountId);
-
-    if (!account) {
+    // const account = accounts.find(account => account.id.toString() === accountId);
+    selectAccount(Number(accountId))
+    if (!selectedAccount) {
         return <div>Счет не найден</div>;
     }
     const handleClose = () => setShow(false);
@@ -40,7 +40,7 @@ const AccountPage = () => {
                 <div className="element">
                     <div className="row">
                         <div className="col">
-                            <h1>Счет: {account.name}</h1>
+                            <h1>Счет: {selectedAccount.name}</h1>
                         </div>
                         <div className="col">
                             <Button variant={"outline-success"} onClick={handleShow}>
@@ -48,7 +48,7 @@ const AccountPage = () => {
                             </Button>
                         </div>
                         <div className="col balance-col">
-                            <span className={"balance-span"}>Траты: {account.balance} руб</span>
+                            <span className={"balance-span"}>Траты: {selectedAccount.balance} руб</span>
                         </div>
                     </div>
                 </div>
@@ -57,7 +57,7 @@ const AccountPage = () => {
                 <div className="block__stats w-25 m-auto">
                     <StatsAccorder accountId={Number(accountId)}/>
                 </div>
-                <ExpensesList expenses={expenses.filter(expense => expense.account_id === account.id)}
+                <ExpensesList expenses={expenses.filter(expense => expense.account_id === selectedAccount.id)}
                               categories={categories}/>
 
             </div>

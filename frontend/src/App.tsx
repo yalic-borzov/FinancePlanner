@@ -14,7 +14,11 @@ const AppContent: React.FC = () => {
     const {isLoggedIn, isAuthReady} = useAuth();
 
     if (!isAuthReady) {
-        return <div>Loading...</div>;
+        return <div>
+            <div className="spinner-border" role="status">
+                <span className="visually-hidden">Loading...</span>
+            </div>
+        </div>;
     }
 
     return (

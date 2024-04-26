@@ -9,10 +9,17 @@ import StatsAccorder from "../components/StatsAccorder.tsx";
 const DashboardPage: React.FC = () => {
     // const [amount, setAmount] = useState('');
     const [selectedPeriod] = useState('month');
-    const {fetchCategories, categories} = useExpenses();
+    const {fetchCategories, categories, selectedAccount, fetchExpenses} = useExpenses();
     const {expenses} = useExpenses();
-
     const [show, setShow] = useState(false);
+
+
+    if (selectedAccount) {
+        useEffect(() => {
+            fetchExpenses(null)
+        }, [fetchExpenses]);
+    }
+
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     useEffect(() => {

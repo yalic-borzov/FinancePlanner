@@ -1,11 +1,12 @@
-import axios from './axiosConfig';
+import axiosInstance from "./axiosConfig";
+import config from '../config.json'
 
-const API_BASE_URL = 'http://localhost:5000/api/auth';
+const API_BASE_URL = `${config.API_BASE_URL}/auth`;
 
 class AuthService {
     async register(username: string, email: string, password: string) {
         try {
-            const response = await axios.post(`${API_BASE_URL}/register`, {
+            const response = await axiosInstance.post(`${API_BASE_URL}/register`, {
                 username,
                 email,
                 password
@@ -18,7 +19,7 @@ class AuthService {
 
     async login(username: string, password: string) {
         try {
-            const response = await axios.post(`${API_BASE_URL}/login`, {
+            const response = await axiosInstance.post(`${API_BASE_URL}/login`, {
                 username,
                 password
             });
@@ -30,7 +31,7 @@ class AuthService {
 
     async getUser() {
         try {
-            const response = await axios.get(`${API_BASE_URL}/user`)
+            const response = await axiosInstance.get(`${API_BASE_URL}/user`)
             return response.data;
         } catch (error) {
             throw error;

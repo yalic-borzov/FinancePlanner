@@ -1,6 +1,7 @@
 import axios from 'axios';
+import config from '../config.json';
 
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = config.API_BASE_URL;
 
 // Функция для получения сохраненного токена
 function getToken() {
@@ -22,7 +23,9 @@ axiosInstance.interceptors.request.use(config => {
     }
     return config;
 }, error => {
+    console.log(API_BASE_URL);
     return Promise.reject(error);
 });
+axiosInstance.defaults.baseURL = API_BASE_URL;
 
 export default axiosInstance;
