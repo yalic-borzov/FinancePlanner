@@ -7,9 +7,8 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = () => {
-    const {isLoggedIn} = useAuth();
+    const {isLoggedIn, verifyToken} = useAuth();
     const [isCheckingToken, setIsCheckingToken] = useState(true);
-    const {verifyToken} = useAuth();
     useEffect(() => {
         const checkToken = async () => {
             try {

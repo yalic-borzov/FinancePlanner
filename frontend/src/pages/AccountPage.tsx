@@ -1,5 +1,5 @@
 // AccountPage.tsx
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import ExpensesList from '../components/ExpensesList';
 import {useExpenses} from '../context/ExpensesContext';
@@ -10,28 +10,39 @@ import StatsAccorder from "../components/StatsAccorder.tsx";
 
 const AccountPage = () => {
     const {accountId} = useParams();
-    const {fetchExpenses, expenses} = useExpenses();
-    const {fetchAccounts} = useExpenses();
-    const {categories, fetchCategories, selectedAccount, selectAccount} = useExpenses();
+    const {
+        fetchExpenses,
+        expenses,
+        fetchAccounts,
+        categories,
+        fetchCategories,
+        selectedAccount,
+        selectAccount
+    } = useExpenses();
     const [show, setShow] = useState(false);
     useEffect(() => {
         if (accountId) {
             fetchExpenses(Number(accountId));
+            selectAccount(Number(accountId));
         }
         fetchCategories()
-    }, [accountId, fetchExpenses, fetchCategories]);
+    }, [accountId, fetchExpenses, fetchCategories, fetchAccounts, selectAccount]);
 
 
     useEffect(() => {
         fetchAccounts();
     }, [fetchAccounts]);
     // const account = accounts.find(account => account.id.toString() === accountId);
-    selectAccount(Number(accountId))
     if (!selectedAccount) {
         return <div>Счет не найден</div>;
     }
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    const filteredExpenses = useMemo(() => {
+        return expenses.filter(expense => expense.account_id === selectedAccount?.id);
+    }, [expenses, selectedAccount?.id]);
+
     return (
         <div className="account-page">
             <Header/>
@@ -57,7 +68,7 @@ const AccountPage = () => {
                 <div className="block__stats w-25 m-auto">
                     <StatsAccorder accountId={Number(accountId)}/>
                 </div>
-                <ExpensesList expenses={expenses.filter(expense => expense.account_id === selectedAccount.id)}
+                <ExpensesList expenses={filteredExpenses}
                               categories={categories}/>
 
             </div>

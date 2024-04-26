@@ -10,10 +10,14 @@ interface ExpensesListProps {
 }
 
 const ExpensesList: React.FC<ExpensesListProps> = ({categories, expenses}) => {
-    const {deleteExpense} = useExpenses();
+    const {deleteExpense, fetchAccounts} = useExpenses();
     const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
+    const handleDeleteExpense = async (id: number) => {
+        deleteExpense(id)
+        fetchAccounts()
+    }
 
     useEffect(() => {
         const filterExpenses = () => {
@@ -64,7 +68,7 @@ const ExpensesList: React.FC<ExpensesListProps> = ({categories, expenses}) => {
                             </div>
                             <div className="col">
                                 <Button variant={"outline-danger"} className={"remove__button"}
-                                        onClick={() => deleteExpense(expense.id)}><i
+                                        onClick={() => handleDeleteExpense(expense.id)}><i
                                     className="bi bi-x-lg"></i></Button>
                             </div>
                         </div>

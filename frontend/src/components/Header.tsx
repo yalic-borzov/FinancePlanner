@@ -4,8 +4,7 @@ import {useAuth} from "../context/AuthContext.tsx"; // Импортируйте 
 
 const Header: React.FC = () => {
     // Используйте useContext для доступа к AuthContext
-    const {isLoggedIn, logout} = useAuth();
-    const {username} = useAuth();
+    const {isLoggedIn, logout, username} = useAuth();
     return (
         <nav className="navbar navbar-expand-lg">
             <div className="container">

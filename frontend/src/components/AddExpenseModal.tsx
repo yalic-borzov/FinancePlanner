@@ -7,9 +7,8 @@ import Numpad from "./Numpad.tsx";
 
 const AddExpenseModal: React.FC<IAddExpenseModal> = ({show, handleClose, accountId}) => {
     const [amount, setAmount] = useState('');
-    const {categories} = useExpenses();
+    const {categories, fetchExpenses, fetchAccounts} = useExpenses();
     const [selectedCategory, setSelectedCategory] = useState<string>('');
-    const {fetchExpenses} = useExpenses();
 
     const handleAddExpense = async () => {
         if (!amount || !selectedCategory) {
@@ -22,6 +21,8 @@ const AddExpenseModal: React.FC<IAddExpenseModal> = ({show, handleClose, account
             alert('Трата успешно добавлена');
             setAmount('');
             setSelectedCategory('');
+            fetchAccounts();
+
         } catch (error) {
             console.error('Error adding expense:', error);
             alert('Не удалось добавить');

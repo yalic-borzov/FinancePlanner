@@ -7,10 +7,8 @@ import AddAccountModal from "../components/AddAccountModal.tsx";
 import StatsAccorder from "../components/StatsAccorder.tsx";
 
 const DashboardPage: React.FC = () => {
-    // const [amount, setAmount] = useState('');
     const [selectedPeriod] = useState('month');
-    const {fetchCategories, categories, selectedAccount, fetchExpenses} = useExpenses();
-    const {expenses} = useExpenses();
+    const {fetchCategories, categories, selectedAccount, fetchExpenses, expenses} = useExpenses();
     const [show, setShow] = useState(false);
 
 
