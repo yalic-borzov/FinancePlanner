@@ -13,7 +13,7 @@ def calculate_date_range(period):
     today = now.date()
     if period == "week":
         start_date = (
-                datetime.combine(today, time.min) - timedelta(days=today.weekday())
+            datetime.combine(today, time.min) - timedelta(days=today.weekday())
         ).replace(tzinfo=pytz.utc)
         end_date = (start_date + timedelta(days=6, seconds=86399)).replace(
             tzinfo=pytz.utc
@@ -37,7 +37,7 @@ def calculate_date_range(period):
 
 
 async def calculate_expenses_stats(
-        user_id: int, start_date, end_date, session: AsyncSession, account_id: int = None
+    user_id: int, start_date, end_date, session: AsyncSession, account_id: int = None
 ):
     # Добавление условия для фильтрации по account_id, если оно предоставлено
     query = select(
@@ -92,7 +92,7 @@ async def get_category_name(category_id: int, session: AsyncSession):
 
 
 async def create_base_categories(session: AsyncSession, user_id: int):
-    categories = ['Дом', "Машина", "Продукты", "Фастфуд", "Аптека", "Переводы", "Такси"]
+    categories = ["Дом", "Машина", "Продукты", "Фастфуд", "Аптека", "Переводы", "Такси"]
     for i in categories:
         print("Create: ", i)
         category = Category(name=i, user_id=user_id)

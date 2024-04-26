@@ -6,7 +6,7 @@ import {Button} from "react-bootstrap";
 
 
 const CategoriesPage: React.FC = () => {
-    const {fetchCategories, categories} = useExpenses();
+    const {fetchCategories, categories, deleteCategory} = useExpenses();
     useEffect(() => {
         fetchCategories();
     }, [fetchCategories]);
@@ -27,7 +27,8 @@ const CategoriesPage: React.FC = () => {
                                         </span>
                                 </div>
                                 <div className="col">
-                                    <Button variant={"danger"}>Удалить категорию</Button>
+                                    <Button variant={"danger"} onClick={() => deleteCategory(category.id)}>Удалить
+                                        категорию</Button>
                                 </div>
                             </div>
 

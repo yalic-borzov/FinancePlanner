@@ -3,7 +3,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.planner_models import Account
 from app.schemas.account import AccountCreateSchema, AccountSchema
-from app.utils.planner_utils import create_base_categories
 
 
 async def create_account_handler(
