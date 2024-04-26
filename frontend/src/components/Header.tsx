@@ -1,40 +1,34 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
-import {useAuth} from "../context/AuthContext.tsx"; // Импортируйте AuthContext из соответствующего файла
+import {useAuth} from "../context/AuthContext.tsx";
+import {Container, Nav, Navbar} from "react-bootstrap";
+import {Link} from "react-router-dom"; // Импортируйте AuthContext из соответствующего файла
 
 const Header: React.FC = () => {
     // Используйте useContext для доступа к AuthContext
     const {isLoggedIn, logout, username} = useAuth();
     return (
-        <nav className="navbar navbar-expand-lg">
-            <div className="container">
-                <Link className="navbar-brand" to="/">FinancePlanner</Link>
-                <div className="collapse navbar-collapse">
-                    <ul className="navbar-nav ms-auto">
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/dashboard">Траты</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/categories">Категории</Link>
-                        </li>
+        <Navbar expand="lg">
+            <Container>
+                <Navbar.Brand href="#home">FinancePlanner</Navbar.Brand>
+                <Navbar.Toggle aria-controls="basic-navbar-nav"/>
+                <Navbar.Collapse id="basic-navbar-nav">
+                    <Nav className="ms-auto">
+                        <Nav.Item><Link className={"nav-link"} to={"/dashboard"}>Траты</Link></Nav.Item>
+                        <Nav.Item><Link className={"nav-link"} to={"/categories"}>Категории</Link></Nav.Item>
                         {isLoggedIn ? (
                             <>
-                                <li className="nav-item">
-                                    <span className="nav-link">Привет, {username}!</span>
-                                </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/" onClick={logout}>Выйти</Link>
-                                </li>
+                                <Nav.Item> <span className="nav-link">Привет, {username}!</span></Nav.Item>
+                                <Nav.Item><Link className={"nav-link"} to={"/"} onClick={logout}>Выйти</Link></Nav.Item>
                             </>
                         ) : (
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/login">Войти</Link>
-                            </li>
+
+                            <Nav.Link href={"/login"}>Войти</Nav.Link>
                         )}
-                    </ul>
-                </div>
-            </div>
-        </nav>
+                    </Nav>
+                </Navbar.Collapse>
+            </Container>
+        </Navbar>
+
     );
 };
 
