@@ -65,7 +65,7 @@ const AccountPage = () => {
                 </div>
                 <br/>
 
-                <div className="block__stats w-25 m-auto">
+                <div className="block__stats block__stats_acc m-auto">
                     <StatsAccorder accountId={Number(accountId)}/>
                 </div>
                 <ExpensesList expenses={filteredExpenses}

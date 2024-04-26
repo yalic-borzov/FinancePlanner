@@ -32,6 +32,10 @@ h1 {
     margin-bottom: 5px;
 }
 
+.block__stats_acc{
+    max-width: 25% !important;
+}
+
 .numpad__block {
     max-width: 100%;
     margin: auto;
@@ -83,6 +87,9 @@ h1 {
     .numpad__block {
         max-width: 100%;
         margin: auto;
+    }
+    .block__stats_acc{
+        max-width: 100% !important;
     }
 
     .block__stats {

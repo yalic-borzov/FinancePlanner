@@ -9,7 +9,7 @@ const Header: React.FC = () => {
     return (
         <Navbar expand="lg">
             <Container>
-                <Navbar.Brand href="#home">FinancePlanner</Navbar.Brand>
+                <Navbar.Brand href="/">FinancePlanner</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ms-auto">
