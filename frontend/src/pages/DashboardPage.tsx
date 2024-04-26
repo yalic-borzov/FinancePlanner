@@ -12,11 +12,12 @@ const DashboardPage: React.FC = () => {
     const [show, setShow] = useState(false);
 
 
-    if (selectedAccount) {
-        useEffect(() => {
-            fetchExpenses(null)
-        }, [fetchExpenses]);
-    }
+    useEffect(() => {
+        if (selectedAccount) {
+            fetchExpenses(null);
+        }
+    }, [selectedAccount, fetchExpenses]);
+
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
